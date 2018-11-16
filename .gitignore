@@ -1,1 +1,5 @@
 output
+node_modules
+config/local.json
+build
+scripts/lib

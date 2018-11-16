@@ -1,0 +1,9 @@
+{
+    "job": {
+        "name": "TEMPLATE",
+        "account": "#ACCT"
+    },
+    "program": {
+        "name": "TEMPLATE"
+    }
+}

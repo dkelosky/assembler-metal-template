@@ -1,8 +1,8 @@
-//TEMPL8$$ JOB 105300000,'ASM/BIND/RUN',MSGCLASS=A,CLASS=A,
+//{{job.name}} JOB {{job.account}},'ASM/BIND/RUN',MSGCLASS=A,CLASS=A,
 //             MSGLEVEL=(1,1),REGION=0M
 /*JOBPARM SYSAFF=*
 //*
-//         SET SRC=TEMPLATE
+//         SET SRC={{program.name}}
 //*
 //* *******************************************************************
 //* A S S E M B L E

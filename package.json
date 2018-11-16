@@ -4,10 +4,19 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "postinstall": "tsc --pretty",
+    "genjcl": "node ./scripts/lib/genjcl",
     "upload": "zowe files upload ftds \"./kelda16/work/asmpgm/template.asm\" \"kelda16.work.asmpgm(template)\"",
-    "build": "zowe jobs submit lf \"./kelda16/work/jcl/template.jcl\" --directory \"./output\"",
+    "build": "zowe jobs submit lf \"./build/custom.jcl\" --directory \"./output\"",
     "start": "npm run upload && npm run build"
   },
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "@types/config": "0.0.34",
+    "@types/mustache": "^0.8.32",
+    "@types/node": "^10.11.3",
+    "config": "^2.0.1",
+    "mustache": "^3.0.1"
+  }
 }
