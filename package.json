@@ -1,0 +1,13 @@
+{
+  "name": "template",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "upload": "zowe files upload ftds \"./kelda16/work/asmpgm/template.asm\" \"kelda16.work.asmpgm(template)\"",
+    "build": "zowe jobs submit lf \"./kelda16/work/jcl/template.jcl\" --directory \"./output\"",
+    "start": "npm run upload && npm run build"
+  },
+  "author": "",
+  "license": "ISC"
+}
