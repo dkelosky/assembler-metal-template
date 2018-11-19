@@ -4,8 +4,8 @@ import * as mustache from "mustache";
 import * as fs from "fs";
 
 const jcl = fs.readFileSync("kelda16/work/jcl/template.jcl").toString();
-mustache.render(jcl, config);
+const rendered = mustache.render(jcl, config);
 
 if (!fs.existsSync("./build")) fs.mkdirSync("./build");
-fs.writeFileSync("./build/custom.jcl", jcl);
+fs.writeFileSync("./build/custom.jcl", rendered);
 console.log("Generated custom JCL to ./build/custom.jcl");
