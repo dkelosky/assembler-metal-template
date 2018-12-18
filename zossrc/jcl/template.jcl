@@ -10,22 +10,18 @@
 //*
 //ASSEMBLE EXEC PGM=ASMA90
 //ASMAOPT  DD  *
-ADATA
-RENT
-MACHINE(ZSERIES-5)
-LIST(133)
+{{#assemble.options}}
+{{.}}
+{{/assemble.options}}
 /*
-//SYSADATA DD  DISP=SHR,DSN=KELDA16.WORK.ADATA(&SRC)          ADATAS
-//SYSLIB   DD  DISP=SHR,DSN=KELDA16.WORK.ASMMAC               MACRO'S
-//         DD  DISP=SHR,DSN=CAI.S910.MACLIB
-//         DD  DISP=SHR,DSN=SYS1.MACLIB
-//         DD  DISP=SHR,DSN=SYS1.MODGEN
-//         DD  DISP=SHR,DSN=ASMA.SASMMAC2
-//         DD  DISP=SHR,DSN=CBC.SCCNSAM
-//         DD  DISP=SHR,DSN=TCPIP.AEZAMAC1
+//SYSADATA DD  DISP=SHR,DSN={{settings.hlq}}.ADATA(&SRC)
+//SYSLIB   DD  DISP=SHR,DSN={{settings.hlq}}.ASMMAC
+{{#assemble.maclib}}
+//         DD  DISP=SHR,DSN={{.}}
+{{/assemble.maclib}}
 //SYSPRINT DD  SYSOUT=*                                       Listing
-//SYSIN    DD  DISP=SHR,DSN=KELDA16.WORK.ASMPGM(&SRC)         GEN'D ASM
-//SYSLIN   DD  DISP=SHR,DSN=KELDA16.WORK.OBJLIB(&SRC)         OBJECT
+//SYSIN    DD  DISP=SHR,DSN={{settings.hlq}}.ASMPGM(&SRC)     GEN'D ASM
+//SYSLIN   DD  DISP=SHR,DSN={{settings.hlq}}.OBJLIB(&SRC)     OBJECT
 //*
 //* *******************************************************************
 //* B I N D   M O D U L E
@@ -38,7 +34,7 @@ LIST(133)
  MAP
  XREF
 /*
-//OBJECT   DD  DISP=SHR,DSN=KELDA16.WORK.OBJLIB               OBJECT
+//OBJECT   DD  DISP=SHR,DSN={{settings.hlq}}.OBJLIB           OBJECT
 //SYSLIN   DD  *                                              LNKINC
  INCLUDE OBJECT(TEMPLATE)
  SETOPT PARM(REUS=REFR)
@@ -46,7 +42,7 @@ LIST(133)
  ENTRY TEMPLATE
  NAME TEMPLATE(R)
 /*
-//SYSLMOD  DD  DISP=SHR,DSN=KELDA16.WORK.LOADLIB(&SRC)        LOAD MOD
+//SYSLMOD  DD  DISP=SHR,DSN={{settings.hlq}}.LOADLIB(&SRC)    LOAD MOD
 //SYSPRINT DD  SYSOUT=*                                       Listing
 //         ENDIF
 //*
@@ -56,7 +52,7 @@ LIST(133)
 //*
 //         IF (RC = 0) THEN
 //RUN      EXEC PGM=&SRC,PARM=('HELLO WORLD')
-//STEPLIB  DD  DISP=SHR,DSN=KELDA16.WORK.LOADLIB
+//STEPLIB  DD  DISP=SHR,DSN={{settings.hlq}}.LOADLIB
 //SNAP     DD  SYSOUT=*
 //SYSPRINT DD  SYSOUT=*
 //SYSMDUMP DD  DUMMY

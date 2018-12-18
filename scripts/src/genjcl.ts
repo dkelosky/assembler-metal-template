@@ -3,7 +3,7 @@ import * as config from "config";
 import * as mustache from "mustache";
 import * as fs from "fs";
 
-const jcl = fs.readFileSync("kelda16/work/jcl/template.jcl").toString();
+const jcl = fs.readFileSync("./zossrc/jcl/template.jcl").toString();
 const rendered = mustache.render(jcl, config);
 
 if (!fs.existsSync("./build")) fs.mkdirSync("./build");

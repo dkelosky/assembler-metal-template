@@ -4,10 +4,13 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "postinstall": "tsc --pretty",
+    "postinstall": "npm run build:scripts",
+    "allocate": "node ./scripts/lib/allocate",
+    "delete": "node ./scripts/lib/delete",
     "genjcl": "node ./scripts/lib/genjcl",
-    "upload": "zowe files upload ftds \"./kelda16/work/asmpgm/template.asm\" \"kelda16.work.asmpgm(template)\"",
+    "upload": "node ./scripts/lib/upload",
     "build": "zowe jobs submit lf \"./build/custom.jcl\" --directory \"./output\"",
+    "build:scripts": "tsc --pretty",
     "start": "npm run upload && npm run build"
   },
   "author": "",
