@@ -1,10 +1,8 @@
-import defaultAssemblyOptions from "./imports/assembly/defaultAssemblyOptions";
-import defaultAssemblyMaclibs from "./imports/assembly/defaultAssemblyMaclibs";
 import defaultBindOptions from "./imports/bind/defaultBindOptions";
-import defaultDataSets from "./imports/defaultDataSets";
-import defaultUploads from "./imports/defaultUploads";
-import defaultMetalOptions from "./imports/metal/defaultMetalOptions";
-import defaultMetalIncludes from "./imports/metal/defaultMetalIncludes";
+import dataSets from "./imports/dataSets";
+import uploads from "./imports/uploads";
+import assemblyOptions from "./imports/assembly/assemblyOptions";
+import assemblyMaclibs from "./imports/assembly/assemblyMaclibs";
 
 export default {
 
@@ -14,10 +12,10 @@ export default {
     },
 
     // working data sets to allocate
-    dataSets: defaultDataSets,
+    dataSets,
 
     // mapping local z/OS to LLQ data sets
-    uploads: defaultUploads,
+    uploads,
 
     // job info
     job: {
@@ -25,7 +23,7 @@ export default {
         account: "#ACCT",
         description: "ASM/BIND/RUN",
 
-        // example
+        // metal c compilations
         // metalCompilations: [
         //     {
         //         name: "TEMPLATE",
@@ -38,8 +36,8 @@ export default {
         assemblies: [
             {
                 name: "TEMPLATE",
-                options: defaultAssemblyOptions,
-                maclibs: defaultAssemblyMaclibs,
+                options: assemblyOptions,
+                maclibs: assemblyMaclibs,
             },
         ],
 
