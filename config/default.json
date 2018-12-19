@@ -8,7 +8,7 @@
             "SYS1.MODGEN",
             "ASMA.SASMMAC2",
             "CBC.SCCNSAM",
-            "TCPIP.AEXAMAC1"
+            "TCPIP.AEZAMAC1"
         ],
         "options": [
             "ADATA",

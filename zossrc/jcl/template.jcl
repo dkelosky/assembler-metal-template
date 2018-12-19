@@ -19,9 +19,9 @@
 {{#assemble.maclib}}
 //         DD  DISP=SHR,DSN={{.}}
 {{/assemble.maclib}}
-//SYSPRINT DD  SYSOUT=*                                       Listing
-//SYSIN    DD  DISP=SHR,DSN={{settings.hlq}}.ASMPGM(&SRC)     GEN'D ASM
-//SYSLIN   DD  DISP=SHR,DSN={{settings.hlq}}.OBJLIB(&SRC)     OBJECT
+//SYSPRINT DD  SYSOUT=*                                   
+//SYSIN    DD  DISP=SHR,DSN={{settings.hlq}}.ASMPGM(&SRC)
+//SYSLIN   DD  DISP=SHR,DSN={{settings.hlq}}.OBJLIB(&SRC)
 //*
 //* *******************************************************************
 //* B I N D   M O D U L E
@@ -34,16 +34,16 @@
  MAP
  XREF
 /*
-//OBJECT   DD  DISP=SHR,DSN={{settings.hlq}}.OBJLIB           OBJECT
-//SYSLIN   DD  *                                              LNKINC
+//OBJECT   DD  DISP=SHR,DSN={{settings.hlq}}.OBJLIB 
+//SYSLIN   DD  *                                    
  INCLUDE OBJECT(TEMPLATE)
  SETOPT PARM(REUS=REFR)
  ORDER TEMPLATE(P)
  ENTRY TEMPLATE
  NAME TEMPLATE(R)
 /*
-//SYSLMOD  DD  DISP=SHR,DSN={{settings.hlq}}.LOADLIB(&SRC)    LOAD MOD
-//SYSPRINT DD  SYSOUT=*                                       Listing
+//SYSLMOD  DD  DISP=SHR,DSN={{settings.hlq}}.LOADLIB(&SRC)
+//SYSPRINT DD  SYSOUT=*                                  
 //         ENDIF
 //*
 //* *******************************************************************
