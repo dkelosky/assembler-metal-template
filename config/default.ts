@@ -1,10 +1,10 @@
-import defaultAssemblyOptions from "./default-imports/assembly/defaultAssemblyOptions";
-import defaultAssemblyMaclibs from "./default-imports/assembly/defaultAssemblyMaclibs";
-import defaultBindOptions from "./default-imports/bind/defaultBindOptions";
-import defaultDataSets from "./default-imports/defaultDataSets";
-import defaultUploads from "./default-imports/defaultUploads";
-import defaultMetalOptions from "./default-imports/metal/defaultMetalOptions";
-import defaultMetalIncludes from "./default-imports/metal/defaultMetalIncludes";
+import defaultAssemblyOptions from "./imports/assembly/defaultAssemblyOptions";
+import defaultAssemblyMaclibs from "./imports/assembly/defaultAssemblyMaclibs";
+import defaultBindOptions from "./imports/bind/defaultBindOptions";
+import defaultDataSets from "./imports/defaultDataSets";
+import defaultUploads from "./imports/defaultUploads";
+import defaultMetalOptions from "./imports/metal/defaultMetalOptions";
+import defaultMetalIncludes from "./imports/metal/defaultMetalIncludes";
 
 export default {
 
