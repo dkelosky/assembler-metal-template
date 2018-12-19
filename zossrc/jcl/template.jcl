@@ -83,7 +83,7 @@
 //*
 //         IF (RC = 0) THEN
 //RUN      EXEC PGM={{{name}}},PARM=({{{parm}}})
-//STEPLIB  DD  DISP=SHR,DSN={{{{settings.hlq}}}}.LOADLIB
+//STEPLIB  DD  DISP=SHR,DSN={{{{settings.hlq}}}.LOADLIB
 //SNAP     DD  SYSOUT=*
 //SYSPRINT DD  SYSOUT=*
 //SYSMDUMP DD  DUMMY
