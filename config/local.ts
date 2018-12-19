@@ -1,6 +1,6 @@
 export default {
     settings: {
-        hlq: "KELDA16.NEW"
+        hlq: "KELDA16.METALC"
     },
     job: {
         name: "KELDA16$",

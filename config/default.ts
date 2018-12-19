@@ -3,6 +3,8 @@ import dataSets from "./imports/dataSets";
 import uploads from "./imports/uploads";
 import assemblyOptions from "./imports/assembly/assemblyOptions";
 import assemblyMaclibs from "./imports/assembly/assemblyMaclibs";
+import metalOptions64 from "./imports/metal/metalOptions64";
+import metalIncludes from "./imports/metal/metalIncludes";
 
 export default {
 
@@ -24,13 +26,13 @@ export default {
         description: "ASM/BIND/RUN",
 
         // metal c compilations
-        // metalCompilations: [
-        //     {
-        //         name: "TEMPLATE",
-        //         options: defaultMetalOptions,
-        //         includes: defaultMetalIncludes,
-        //     }
-        // ],
+        metalCompilations: [
+            {
+                name: "TEMPLATE",
+                options: metalOptions64,
+                includes: metalIncludes,
+            }
+        ],
 
         // assemblies
         assemblies: [
