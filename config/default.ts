@@ -25,7 +25,7 @@ export default {
         account: "#ACCT",
         description: "ASM/BIND/RUN",
 
-        // example
+        // metal c compilations
         // metalCompilations: [
         //     {
         //         name: "TEMPLATE",
