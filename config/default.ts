@@ -41,6 +41,11 @@ export default {
                 options: assemblyOptions,
                 maclibs: assemblyMaclibs,
             },
+            {
+                name: "WTOUTILS",
+                options: assemblyOptions,
+                maclibs: assemblyMaclibs,
+            },
         ],
 
         // binds
@@ -48,6 +53,9 @@ export default {
             {
                 name: "TEMPLATE",
                 options: defaultBindOptions,
+                includes: [
+                    "WTOUTILS"
+                ]
             }
         ],
 
@@ -55,7 +63,6 @@ export default {
         execs: [
             {
                 name: "TEMPLATE",
-                parm: "'Hello World'",
             }
         ]
     }

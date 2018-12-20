@@ -1,8 +1,7 @@
 #include <stdio.h>
-
-void wto(char *);
+#include "wtoutils.h"
 
 int main()
 {
-    return 10;
+    return wto("hey");
 }
