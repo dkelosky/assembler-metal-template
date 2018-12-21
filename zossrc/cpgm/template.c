@@ -3,5 +3,8 @@
 
 int main()
 {
-    return wto("hey");
+    char *message = "Hello World from Metal C";
+    WTO_BUF buf = {0};
+    buf.len = sprintf(buf.msg, message);
+    return wto(&buf);
 }

@@ -59,9 +59,62 @@ SYSPLRCL EQU   132                     SYSPRINT DD LRECL
 *
          ENTRY WTO
 WTO      DS    0H
-         SAVE  (14,12),,'&MODNAME.  &SYSTIME &SYSDATE' Save regs
 *
-         LGHI  R15,13
+*        Save input regs
+*
+         SAVE  (14,12),,'&MODNAME.  &SYSTIME &SYSDATE' Save regs
+C        USING SAVF4SA,R13             Caller's save area
+*
+*        Clear our DSA
+*
+         LG    R0,C.SAVF4SANEXT        -> Current NAB
+         LGHI  R1,WTODSA_LEN           Length of our DSA
+         SLGR  R15,R15                 Pad + length
+         MVCL  R0,R14                  Clear our DSA
+*
+*        Address DSA and CONSTANT
+*
+         LARL  R11,CONSTANT            -> CONSTANT
+         LG    R10,C.SAVF4SANEXT       -> Current NAB
+         USING WTODSA,R10              WTODSA addressability
+         USING CONSTANT,R11            CONSTANT addressability
+*
+*        Calculate NAB
+*
+         LG    R0,C.SAVF4SANEXT        -> Current NAB
+         AGHI  R0,WTODSA_LEN           -> Next NAB
+*
+*        Chain save areas and set new NAB
+*
+         LA    R2,WTODSA_SAVE          -> Our save area
+O        USING SAVF4SA,R2              Caller's save area
+         STG   R13,O.SAVF4SAPREV       Save the previous save area
+         STG   R0,O.SAVF4SANEXT        -> NAB
+*
+*        Restore input regs
+*
+         LMG   R14,R1,C.SAVF4SAG64RS14 -> Restore entry regs R14-R1
+         DROP  C,O                     Drop named USINGs of save area
+*
+*        Set our save area
+*
+         LGR   R13,R2                  -> Save area
+         USING SAVF4SA,R13             Save area addressability
+*
+*        Work
+*
+         SLGR  R0,R0                   No multiline
+         MVC   WTODSA_WPL,WTOMODL          Set WTO model
+*
+         LG    R2,0(,R1)
+*
+         WTO   TEXT=(R2),              Issue message                   +
+               MF=(E,WTODSA_WPL)
+*
+*        Exit linkage
+*
+         LGHI  R15,13                  Set RC 
+         LG    R13,SAVF4SAPREV         -> caller's save area
 *
          RETURN (14,12),,RC=(15)       Return to caller
 *
@@ -75,7 +128,8 @@ CONSTANT DS    0D                      Alignment
 *
          DS    0D                      Alignment
 WTOMOD   WTO   TEXT=,                  WTO prototype                   +
-               ROUTCDE=(11),DESC=(6),                                  +
+               ROUTCDE=(11),                                           +
+               DESC=(6),                                               +
                MF=L
 WTOMODL  EQU   WTOMOD,*-WTOMOD
 *
