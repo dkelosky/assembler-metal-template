@@ -3,12 +3,12 @@
 
 typedef struct {
     short int len;
-    char msg[70];
+    char msg[126];
 } WTO_BUF;
 
 /**
  * wto utilties structures and function prototypes
  */
-int wto(WTO_BUF *);
+void wto(WTO_BUF *);
 
 #endif
