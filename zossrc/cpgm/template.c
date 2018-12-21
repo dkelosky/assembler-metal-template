@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include "wtoutils.h"
 
+// using default prolog
 void main()
 {
     char *message = "Hello World from Metal C";
