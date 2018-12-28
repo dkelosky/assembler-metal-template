@@ -64,7 +64,7 @@ function uploadFolder(folder: string, file?: string) {
             });
         }
     } else {
-        console.error(`${dir} does not exist`);
+        console.error(`>>> ${dir} does not exist`);
     }
 }
 

@@ -1,16 +1,16 @@
-//{{{job.name}}} JOB {{{job.account}}},
-//             '{{{job.description}}}',
-//             MSGCLASS=A,
-//             CLASS=A,
+//{{{settings.name}}} JOB {{{settings.account}}},
+//             '{{{settings.description}}}',
+//             MSGCLASS={{{settings.messageClass}}},
+//             CLASS={{{settings.jobClass}}},
 //             MSGLEVEL=(1,1),
 //             REGION=0M
 /*JOBPARM SYSAFF=*
-{{#each job.compilation.sources}}
+{{#each job.compile.sources}}
 //*
 //* Metal C {{{@key}}}
 //*
 //         IF (RC = 0) THEN
-//METAL    EXEC PGM=CCNDRVR,
+//MTL{{@index}} EXEC PGM=CCNDRVR,
 //          PARM=('OPTFILE(DD:OPTIONS)', 
 //         'LIST(DD:LISTOUT)')
 //OPTIONS  DD  *
@@ -21,7 +21,7 @@
 {{/each}}
 {{!-- else use options at the higher context level  --}}
 {{else}}
-{{#each ../job.compilation/options}}
+{{#each ../job.compile/options}}
 {{{.}}}
 {{/each}}
 {{/if}}
@@ -36,7 +36,7 @@
 //         DD  DISP=SHR,DSN={{{.}}}
 {{/each}}
 {{else}}
-{{#each ../job.compilation/includes}}
+{{#each ../job.compile/includes}}
 //         DD  DISP=SHR,DSN={{{.}}}
 {{/each}}
 {{/if}}
@@ -45,7 +45,7 @@
 //SYSPRINT DD  SYSOUT=*
 //         ENDIF
 {{/each}}
-{{#each job.assembly.sources}}
+{{#each job.assemble.sources}}
 //*
 //* Assemble {{{@key}}}
 //*
@@ -59,7 +59,7 @@
 {{/each}}
 {{!-- else use options at the higher context level  --}}
 {{else}}
-{{#each ../job.assembly/options}}
+{{#each ../job.assemble/options}}
 {{{.}}}
 {{/each}}
 {{/if}}
@@ -71,7 +71,7 @@
 //         DD  DISP=SHR,DSN={{{.}}}
 {{/each}}
 {{else}}
-{{#each ../job.compilation/includes}}
+{{#each ../job.assemble/includes}}
 //         DD  DISP=SHR,DSN={{{.}}}
 {{/each}}
 {{/if}}
@@ -85,7 +85,7 @@
 //* Bind {{{@key}}}
 //*
 //         IF (RC = 0) THEN
-//BIND     EXEC PGM=IEWL,PARM='OPTIONS=IEWLOPT'
+//BND{{@index}} EXEC PGM=IEWL,PARM='OPTIONS=IEWLOPT'
 //IEWLOPT  DD  *
 {{!-- if options at this object level, use them  --}}
 {{#if options}}
@@ -107,7 +107,7 @@
  INCLUDE OBJECT({{.}})
  {{/each}}
  {{else}}
- {{#each ../job.compilation/includes}}
+ {{#each ../job.compile/includes}}
  INCLUDE OBJECT({{.}})
  {{/each}}
  {{/if}}
@@ -122,7 +122,7 @@
 {{/each}}
 {{#each job.execute.sources}}
 //*
-//* Exec {{{@key}}}
+//* Execute {{{@key}}}
 //*
 //         IF (RC = 0) THEN
 //RUN      EXEC PGM={{{@key}}}{{#if options}},

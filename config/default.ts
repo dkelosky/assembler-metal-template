@@ -10,7 +10,12 @@ export default {
 
     // settings for all other sections
     settings: {
-        hlq: "PUBLIC.TEMPLATE"
+        hlq: "PUBLIC.TEMPLATE",
+        name: "TEMPLATE",
+        account: "#ACCT",
+        description: "ASM/BIND/RUN",
+        messageClass: "A",
+        jobClass: "A",
     },
 
     // working data sets to allocate
@@ -21,12 +26,9 @@ export default {
 
     // job info
     job: {
-        name: "TEMPLATE",
-        account: "#ACCT",
-        description: "ASM/BIND/RUN",
 
         // metal c compilation configuration
-        compilation: {
+        compile: {
             options: metalOptions64,
             includes: metalIncludes,
             sources: {
@@ -36,8 +38,8 @@ export default {
             },
         },
 
-        // assembly configuration
-        assembly: {
+        // assemble configuration
+        assemble: {
             options: assemblyOptions,
             includes: assemblyMaclibs,
             sources: {
