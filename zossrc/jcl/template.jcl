@@ -85,7 +85,7 @@
 //* Bind {{{@key}}}
 //*
 //         IF (RC = 0) THEN
-//BND{{@index}} EXEC PGM=IEWL,PARM='OPTIONS=IEWLOPT'
+//BND{{@index}}    EXEC PGM=IEWL,PARM='OPTIONS=IEWLOPT'
 //IEWLOPT  DD  *
 {{!-- if options at this object level, use them  --}}
 {{#if options}}
