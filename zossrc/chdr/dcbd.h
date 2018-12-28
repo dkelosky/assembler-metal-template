@@ -1,6 +1,7 @@
 #ifndef __ihadcb__
 #define __ihadcb__
 
+// NOTE(Kelosky): manual update
 #if defined(__IBM_METAL__)
 #pragma pack(packed)
 #endif
@@ -821,7 +822,9 @@ struct ihadcb
 #define dcblngqs 0x60 /* LENGTH OF DCB WITH QSAM INTERFACE    @L1A          */
 #define dcblngps 0x60 /* LENGTH OF DCB SUFFICIENT FOR QSAM OR @P2C          */
 
+// NOTE(Kelosky): manual update
 #if defined(__IBM_METAL__)
 #pragma pack(reset)
 #endif
+
 #endif
