@@ -1,7 +1,19 @@
 #! /bin/env node
+
+// bypass immutability
+process.env.ALLOW_CONFIG_MUTATIONS = "yes"; // value doesn't matter
+
 import * as config from "config";
 import * as handlebars from "handlebars";
 import * as fs from "fs";
+
+const assembles = config.get<object[]>("job.assembly")
+let index: number;
+// assembles.push({name: "hey"})
+// assembles.forEach((ass, i) => {
+    // if (ass.name === "WTO") index = i
+// })
+// if (index) assembles.splice(index)
 
 const jcl = fs.readFileSync("./zossrc/jcl/template.jcl").toString();
 const compiled = handlebars.compile(jcl); 

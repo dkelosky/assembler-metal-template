@@ -25,39 +25,41 @@ export default {
         account: "#ACCT",
         description: "ASM/BIND/RUN",
 
-        // metal c compilations
-        metalCompilations: [
-            {
-                name: "TEMPLATE",
-                options: metalOptions64,
-                includes: metalIncludes,
-            }
-        ],
-
-        // assemblies
-        assemblies: [
-            {
-                name: "TEMPLATE",
-                options: assemblyOptions,
-                maclibs: assemblyMaclibs,
+        // metal c compilation configuration
+        compilation: {
+            options: metalOptions64,
+            includes: metalIncludes,
+            sources: {
+                TEMPLATE: {
+                    // override options here
+                },
             },
-            {
-                name: "WTO",
-                options: assemblyOptions,
-                maclibs: assemblyMaclibs,
-            },
-        ],
+        },
 
-        // binds
-        binds: [
-            {
-                name: "TEMPLATE",
-                options: defaultBindOptions,
-                includes: [
-                    "WTO"
-                ]
+        // assembly configuration
+        assembly: {
+            options: assemblyOptions,
+            includes: assemblyMaclibs,
+            sources: {
+                TEMPLATE: {
+                    // override options here
+                },
+                WTO: {},
+            },
+        },
+
+        // bind configuration
+        bind: {
+            options: defaultBindOptions,
+            // includes: nothing included in every bind right now
+            sources: {
+                TEMPLATE: {
+                    includes: [
+                        "WTO"
+                    ]
+                }
             }
-        ],
+        },
 
         // executables
         execs: [

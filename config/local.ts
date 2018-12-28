@@ -4,6 +4,6 @@ export default {
     },
     job: {
         name: "KELDA16$",
-        account: "105300000"
+        account: "105300000",
     },
 }
