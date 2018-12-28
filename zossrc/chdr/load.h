@@ -2,7 +2,6 @@
 #define LOAD_HY
 #include <stdio.h>
 
-// z/OS LOAD
 #if defined(__IBM_METAL__)
 #define LOAD(ep, name)                                          \
     __asm(                                                      \
@@ -18,7 +17,6 @@
 #define LOAD(ep, name)
 #endif
 
-// z/OS DELETE
 #if defined(__IBM_METAL__)
 #define DELETE(name)                                            \
     __asm(                                                      \
@@ -32,8 +30,6 @@
 #define DELETE(name)
 #endif
 
-
-// load routine
 static void *__ptr32 loadModule(const char *name)
 {
     char tempName[9];
@@ -45,7 +41,6 @@ static void *__ptr32 loadModule(const char *name)
     return ep;
 }
 
-// delete routine
 static void deleteModule(const char *name)
 {
     char tempName[9];
