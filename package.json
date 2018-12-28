@@ -10,8 +10,7 @@
     "genjcl": "node ./scripts/lib/genjcl",
     "upload": "node ./scripts/lib/upload",
     "build": "zowe jobs submit lf \"./build/custom.jcl\" --directory \"./output\"",
-    "build:scripts": "tsc --pretty",
-    "start": "npm run upload && npm run build"
+    "build:scripts": "tsc --pretty"
   },
   "author": "",
   "license": "ISC",

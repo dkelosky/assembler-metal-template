@@ -42,7 +42,7 @@ export default {
                 maclibs: assemblyMaclibs,
             },
             {
-                name: "WTOUTILS",
+                name: "WTO",
                 options: assemblyOptions,
                 maclibs: assemblyMaclibs,
             },
@@ -54,7 +54,7 @@ export default {
                 name: "TEMPLATE",
                 options: defaultBindOptions,
                 includes: [
-                    "WTOUTILS"
+                    "WTO"
                 ]
             }
         ],

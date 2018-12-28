@@ -26,4 +26,10 @@
 * `npm run build:scripts` -> Rebuild scripts
 * `npm [run] start` -> upload & build
 
+### Advanced Usage
+
+#### Upload
+ * `npm run upload -- asmpgm` -> upload asmpgm folder
+ * `npm run upload -- asmpgm asmmac/#entry asmmac/#exit` upload asmpgm folder & #entry / #exit from asmmac
+
 https://medium.com/@dkelosky/zowe-and-hlasm-hello-world-build-deploy-695be1eb13dc
