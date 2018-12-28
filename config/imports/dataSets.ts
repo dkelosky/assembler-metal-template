@@ -15,6 +15,14 @@ export default {
         dataSetType: "LIBRARY",
         size: "10CYL"
     },
+    ASMCHDR: {
+        blockSize: 3120,
+        directoryBlocks: 20,
+        recordFormat: "FB",
+        recordLength: 80,
+        dataSetType: "LIBRARY",
+        size: "10CYL"
+    },
     ADATA: {
         blockSize: 32760,
         directoryBlocks: 20,
