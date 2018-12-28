@@ -120,16 +120,16 @@
 //SYSPRINT DD  SYSOUT=*
 //         ENDIF
 {{/each}}
-{{#job.execs}}
+{{#each job.execute.sources}}
 //*
-//* Exec {{{name}}}
+//* Exec {{{@key}}}
 //*
 //         IF (RC = 0) THEN
-//RUN      EXEC PGM={{{name}}}{{#if parm}},
-//             PARM=({{{parm}}}){{/if}}
+//RUN      EXEC PGM={{{@key}}}{{#if options}},
+//             PARM=({{{options}}}){{/if}}
 //STEPLIB  DD  DISP=SHR,DSN={{{../settings.hlq}}}.LOADLIB
 //SNAP     DD  SYSOUT=*
 //SYSPRINT DD  SYSOUT=*
 //SYSMDUMP DD  DUMMY
 //         ENDIF
-{{/job.execs}}
+{{/each}}

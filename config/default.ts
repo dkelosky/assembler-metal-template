@@ -57,15 +57,20 @@ export default {
                     includes: [
                         "WTO"
                     ]
+                    // override options here
                 }
             }
         },
 
         // executables
-        execs: [
-            {
-                name: "TEMPLATE",
+        execute: {
+            // options: no parms to every exec right now (options are PARM=)
+            sources: {
+                TEMPLATE: {
+                    // override options here (options are PARM=)
+                    // options: '"HELLO WORLD"'
+                }
             }
-        ]
+        }
     }
 }
