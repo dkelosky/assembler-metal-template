@@ -35,5 +35,6 @@
  * `npm run upload -- asmpgm` -> upload asmpgm folder
  * `npm run upload -- asmpgm asmmac/#entry asmmac/#exit` upload asmpgm folder & #entry / #exit from asmmac
 
-
+## Reference
 https://medium.com/@dkelosky/zowe-and-hlasm-hello-world-build-deploy-695be1eb13dc
+https://medium.com/@dkelosky/how-to-automate-z-os-data-set-allocation-using-zowe-json-30e70fb960d8
