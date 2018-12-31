@@ -24,7 +24,7 @@
 #endif
 
 #if defined(__IBM_METAL__)
-#define STORAGE_RELEASE(addr, size)                             \
+#define STORAGE_RELEASE_24(addr, size)                          \
     __asm(                                                      \
         "*                                                  \n" \
         " LLGF  0,%1      = storage length                  \n" \
@@ -40,7 +40,7 @@
         : "m"(addr), "m"(size)                                  \
         : "r0", "r1", "r14", "r15");
 #else
-#define STORAGE_RELEASE(addr, size)
+#define STORAGE_RELEASE_24(addr, size)
 #endif
 
 #if defined(__IBM_METAL__)
@@ -90,9 +90,9 @@ static void *__ptr32 storageObtain24(int size)
     return addr;
 }
 
-static void storageRelease(void *__ptr32 addr, int size)
+static void storageRelease24(void *__ptr32 addr, int size)
 {
-    STORAGE_RELEASE(addr, size);
+    STORAGE_RELEASE_24(addr, size);
 }
 
 // IARST64 get 64-bit storage

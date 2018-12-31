@@ -822,9 +822,10 @@ struct ihadcb
 #define dcblngqs 0x60 /* LENGTH OF DCB WITH QSAM INTERFACE    @L1A          */
 #define dcblngps 0x60 /* LENGTH OF DCB SUFFICIENT FOR QSAM OR @P2C          */
 
-// NOTE(Kelosky): manual update
+// NOTE(Kelosky): manual updates
 #if defined(__IBM_METAL__)
 #pragma pack(reset)
 #endif
+typedef struct ihadcb IHADCB;
 
 #endif

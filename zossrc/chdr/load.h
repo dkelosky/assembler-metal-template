@@ -1,5 +1,5 @@
-#ifndef LOAD_HY
-#define LOAD_HY
+#ifndef LOAD_H
+#define LOAD_H
 #include <stdio.h>
 
 #if defined(__IBM_METAL__)
