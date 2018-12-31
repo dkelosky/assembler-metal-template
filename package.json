@@ -9,6 +9,7 @@
     "delete": "node ./scripts/lib/delete",
     "genjcl": "node ./scripts/lib/genjcl",
     "genjcl:convert": "node ./scripts/lib/convert",
+    "genjcl:template": "node ./scripts/lib/genjcl compile/template assemble/template bind/template execute",
     "upload": "node ./scripts/lib/upload",
     "submit": "zowe jobs submit lf \"./build/custom.jcl\" --directory \"./output\"",
     "submit:convert": "zowe jobs submit lf \"./build/convert.jcl\" --directory \"./output\"",

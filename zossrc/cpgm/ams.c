@@ -1,8 +1,19 @@
 #include "ams.h"
 
-void open(IHADCB *dcb)
+int open(IHADCB *dcb)
 {
+    int rc = 0;
     OPEN_PL opl = {0};
-    opl.option = OPEN_FLAG;
-    OPEN_OUTPUT(*dcb, opl);
+    opl.option = OPTION_BYTE;
+    OPEN_OUTPUT(*dcb, opl, rc);
+    return rc;
+}
+
+int close(IHADCB *dcb)
+{
+    int rc = 0;
+    CLOSE_PL cpl = {0};
+    cpl.option = OPTION_BYTE;
+    CLOSE(*dcb, cpl, rc);
+    return rc;
 }

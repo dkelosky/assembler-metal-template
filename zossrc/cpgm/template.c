@@ -17,11 +17,13 @@ void main()
     dcb->dcblrecl = 80;
     dcb->dcbrecfm = dcbrecf + dcbrecbr;
 
-    open(dcb);
+    int openRc = open(dcb);
 
-    char *message = "Hello World from Metal C";
+    int closeRc = close(dcb);
+
+    char *message = "openRc: %x, closeRc: %x";
     WTO_BUF buf = {0};
-    buf.len = sprintf(buf.msg, message);
+    buf.len = sprintf(buf.msg, message, openRc, closeRc);
     wto(&buf);
     storageRelease24(dcb, sizeof(IHADCB));
     return;
