@@ -69,5 +69,5 @@ int writeSync(IHADCB *dcb, char *buffer)
         return rc;
     }
 
-    // return check(&wpl);
+    return check(&wpl);
 }
