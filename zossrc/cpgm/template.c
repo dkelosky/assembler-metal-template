@@ -11,10 +11,16 @@
 void main()
 {
     IHADCB *dcb = storageObtain24(sizeof(IHADCB));
+    memset(dcb, 0x00, sizeof(IHADCB));
+
     memset(dcb->dcbddnam, ' ', sizeof(dcb->dcbddnam));
-    strcpy(dcb->dcbddnam, "SYSPRINT");
-    dcb->dcbblksi = 80;
-    dcb->dcblrecl = 80;
+    memcpy(dcb->dcbddnam, "SYSPRINT", sizeof(dcb->dcbddnam));
+    // memcpy(dcb->dcbddnam, "SYSPRINT", sizeof(dcb->dcbddnam));
+    // __asm(" DCB DDNAME=*-*,DSORG=PS,MACRF=W" : "DC"(model));
+    // IHADCB mod = model;
+
+    dcb->dcbblksi = 132;
+    dcb->dcblrecl = 132;
     dcb->dcbrecfm = dcbrecf + dcbrecbr;
 
     int openRc = open(dcb);
