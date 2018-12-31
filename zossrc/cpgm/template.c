@@ -15,15 +15,15 @@ void main()
 
     memset(dcb->dcbddnam, ' ', sizeof(dcb->dcbddnam));
     memcpy(dcb->dcbddnam, "SYSPRINT", sizeof(dcb->dcbddnam));
-    // memcpy(dcb->dcbddnam, "SYSPRINT", sizeof(dcb->dcbddnam));
-    // __asm(" DCB DDNAME=*-*,DSORG=PS,MACRF=W" : "DC"(model));
-    // IHADCB mod = model;
 
     dcb->dcbblksi = 132;
     dcb->dcblrecl = 132;
     dcb->dcbrecfm = dcbrecf + dcbrecbr;
 
     int openRc = open(dcb);
+
+    char writeBuf[132] = "Hey from C";
+    // writeSync(dcb, writeBuf);
 
     int closeRc = close(dcb);
 

@@ -1,5 +1,8 @@
 #include "ams.h"
 
+// NOTE(Kelosky): this was probably a better candidate to be done from an
+// assembler helper routine like /asmpgm/wto, but it's too late now :)
+
 int open(IHADCB *dcb)
 {
     int rc = 0;
@@ -24,6 +27,21 @@ int open(IHADCB *dcb)
     OPEN_OUTPUT(*dcb, opl, rc);
     return rc;
 }
+int write(IHADCB *dcb, WRITE_PL *wpl, char *buffer)
+{
+    int rc = 0;
+    // NOTE(Kelosky): first item in WPL is ECB
+    WRITE(*dcb, *wpl, *buffer, rc);
+    return rc;
+}
+
+int check(WRITE_PL *wpl)
+{
+    int rc = 0;
+    // NOTE(Kelosky): first item in WPL is ECB
+    CHECK(*wpl, rc)
+    return rc;
+}
 
 int read(IHADCB *dcb)
 {
@@ -39,4 +57,17 @@ int close(IHADCB *dcb)
     cpl.option = OPTION_BYTE;
     CLOSE(*dcb, cpl, rc);
     return rc;
+}
+
+int writeSync(IHADCB *dcb, char *buffer)
+{
+    int rc = 0;
+    WRITE_PL wpl = {0};
+    rc = write(dcb, &wpl, buffer);
+    if (rc)
+    {
+        return rc;
+    }
+
+    // return check(&wpl);
 }

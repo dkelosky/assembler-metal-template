@@ -1,2 +1,2 @@
-         DCBD  DSORG=PS         IHADCB
+         DCBD  DSORG=PS
          END      ,
