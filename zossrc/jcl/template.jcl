@@ -36,7 +36,7 @@
 //         DD  DISP=SHR,DSN={{{.}}}
 {{/each}}
 {{else}}
-{{#each ../job.compile/includes}}
+{{#each ../job.compile.includes}}
 //         DD  DISP=SHR,DSN={{{.}}}
 {{/each}}
 {{/if}}
@@ -71,7 +71,7 @@
 //         DD  DISP=SHR,DSN={{{.}}}
 {{/each}}
 {{else}}
-{{#each ../job.assemble/includes}}
+{{#each ../job.assemble.includes}}
 //         DD  DISP=SHR,DSN={{{.}}}
 {{/each}}
 {{/if}}
@@ -107,7 +107,7 @@
  INCLUDE OBJECT({{{.}}})
  {{/each}}
  {{else}}
- {{#each ../job.bind/includes}}
+ {{#each ../job.bind.includes}}
  INCLUDE OBJECT({{{.}}})
  {{/each}}
  {{/if}}
