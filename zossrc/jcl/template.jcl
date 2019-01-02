@@ -107,7 +107,7 @@
  INCLUDE OBJECT({{.}})
  {{/each}}
  {{else}}
- {{#each ../job.compile/includes}}
+ {{#each ../job.bind/includes}}
  INCLUDE OBJECT({{.}})
  {{/each}}
  {{/if}}

@@ -27,6 +27,7 @@ int open(IHADCB *dcb)
     OPEN_OUTPUT(*dcb, opl, rc);
     return rc;
 }
+
 int write(IHADCB *dcb, WRITE_PL *wpl, char *buffer)
 {
     int rc = 0;
