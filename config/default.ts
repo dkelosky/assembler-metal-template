@@ -1,4 +1,4 @@
-import defaultBindOptions from "./imports/bind/defaultBindOptions";
+import bindOptions from "./imports/bind/bindOptions";
 import dataSets from "./imports/dataSets";
 import uploads from "./imports/uploads";
 import assemblyOptions from "./imports/assembly/assemblyOptions";
@@ -55,7 +55,7 @@ export default {
 
         // bind configuration
         bind: {
-            options: defaultBindOptions,
+            options: bindOptions,
             // includes: nothing included in every bind right now
             sources: {
                 TEMPLATE: {
