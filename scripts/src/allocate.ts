@@ -14,7 +14,6 @@ Object.keys(dataSets).forEach((key) => {
         `--rf ${dataSets[key].recordFormat} ` +
         `--dst ${dataSets[key].dataSetType} ` +
         `--rl ${dataSets[key].recordLength} ` +
-        `--dt ${dataSets[key].recordLength} ` +
         `--sz ${dataSets[key].size}`;
     console.log(cmd)
     exec(cmd, (err, stdout, stderr) => {
