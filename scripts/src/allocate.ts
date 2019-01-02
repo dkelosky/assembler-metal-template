@@ -1,6 +1,6 @@
 #! /bin/env node
 import * as config from "config";
-import { execSync } from "child_process";
+import { exec } from "child_process";
 import { DataSets } from "./doc/IDataSets";
 
 const hlq: string = config.get<string>('settings.hlq');
@@ -12,10 +12,14 @@ Object.keys(dataSets).forEach((key) => {
         `--bs ${dataSets[key].blockSize} ` +
         `--db ${dataSets[key].directoryBlocks} ` +
         `--rf ${dataSets[key].recordFormat} ` +
+        `--dst ${dataSets[key].dataSetType} ` +
         `--rl ${dataSets[key].recordLength} ` +
         `--dt ${dataSets[key].recordLength} ` +
         `--sz ${dataSets[key].size}`;
     console.log(cmd)
-    const resp = execSync(cmd).toString();
-    console.log(resp.toString())
+    exec(cmd, (err, stdout, stderr) => {
+        if (err) console.log(err)
+        if (stdout) console.log(stdout.toString());
+        if (stderr) console.log(stderr.toString());
+    });
 });

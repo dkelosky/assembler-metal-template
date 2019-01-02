@@ -91,5 +91,20 @@ export default {
                 IHAECB: {}
             },
         },
-    }
+    },
+
+    deploy: {
+        ftp: {
+            options: [
+                "cd 'KELDA16.WORK.LOADLIB'",
+                "mdelete *"
+            ],
+            includes: [
+                "TEMPLATE",
+            ],
+            sources: {
+                CA11: {},
+            }
+        }
+    },
 }
