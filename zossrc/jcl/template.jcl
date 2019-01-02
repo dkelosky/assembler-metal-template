@@ -104,11 +104,11 @@
  INCLUDE OBJECT({{{@key}}})
  {{#if includes}}
  {{#each includes}}
- INCLUDE OBJECT({{.}})
+ INCLUDE OBJECT({{{.}}})
  {{/each}}
  {{else}}
  {{#each ../job.bind/includes}}
- INCLUDE OBJECT({{.}})
+ INCLUDE OBJECT({{{.}}})
  {{/each}}
  {{/if}}
  SETOPT PARM(REUS=REFR)
