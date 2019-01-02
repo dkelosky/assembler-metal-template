@@ -21,7 +21,7 @@
 {{/each}}
 {{!-- else use options at the higher context level  --}}
 {{else}}
-{{#each ../job.compile/options}}
+{{#each ../job.compile.options}}
 {{{.}}}
 {{/each}}
 {{/if}}
@@ -59,7 +59,7 @@
 {{/each}}
 {{!-- else use options at the higher context level  --}}
 {{else}}
-{{#each ../job.assemble/options}}
+{{#each ../job.assemble.options}}
 {{{.}}}
 {{/each}}
 {{/if}}
@@ -94,7 +94,7 @@
 {{/each}}
 {{!-- else use options at the higher context level  --}}
 {{else}}
-{{#each ../job.bind/options}}
+{{#each ../job.bind.options}}
 {{{.}}}
 {{/each}}
 {{/if}}
