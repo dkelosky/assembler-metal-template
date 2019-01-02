@@ -1,5 +1,5 @@
 output
 node_modules
-config/local.json
+config/local.ts
 build
 scripts/lib
