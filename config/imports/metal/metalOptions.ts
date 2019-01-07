@@ -6,6 +6,7 @@ export default [
     "CSECT",
     "INLINE",
     "NOSE",
+    "AGG", //aggregate layout of struct
     "LANGLVL(EXTENDED)",
     "LIST",
     "NOLONGNAME",

@@ -5,6 +5,20 @@
 #include "ihaecb.h"
 
 #if defined(__IBM_METAL__)
+#define DCB_WRITE_MODEL(dcbwm)                                  \
+    __asm(                                                      \
+        "*                                                  \n" \
+        " DCB DDNAME=*-*,"                                      \
+        "DSORG=PS,"                                             \
+        "MACRF=W                                          \n"   \
+        "*                                                    " \
+        : "DS"(dcbwm));
+#else
+#define DCB_WRITE_MODEL(dcbwm)
+#endif
+DCB_WRITE_MODEL(model);
+
+#if defined(__IBM_METAL__)
 #define OPEN_OUTPUT(dcb, plist, rc)                             \
     __asm(                                                      \
         "*                                                  \n" \
@@ -62,6 +76,29 @@
 #endif
 
 #if defined(__IBM_METAL__)
+#define SNAP(dcb, header, start, end, plist, rc)                \
+    __asm(                                                      \
+        "*                                                  \n" \
+        " SNAP DCB=%1,"                                         \
+        "ID=1,"                                                 \
+        "STORAGE=(%2,%3),"                                      \
+        "STRHDR=%4,"                                            \
+        "MF=(E,%5)                                          \n" \
+        "*                                                  \n" \
+        " ST    15,%0     Save RC                           \n" \
+        "*                                                    " \
+        : "=m"(rc)                                              \
+        : "m"(dcb),                                             \
+          "m"(start),                                           \
+          "m"(end),                                             \
+          "m"(header),                                          \
+          "m"(plist)                                            \
+        : "r0", "r1", "r14", "r15");
+#else
+#define SNAP(dcb, header, start, end, plist, rc)
+#endif
+
+#if defined(__IBM_METAL__)
 #define CHECK(ecb, rc)                                          \
     __asm(                                                      \
         "*                                                  \n" \
@@ -87,7 +124,8 @@ typedef struct
     IHADCB *PTR32 dcb;
 } OPEN_PL;
 
-typedef struct {
+typedef struct
+{
     ECB ecb;
     unsigned char typeField1;
     unsigned char typeField2;
@@ -97,6 +135,29 @@ typedef struct {
     unsigned char *PTR32 record;
 } WRITE_PL;
 
+#define MAX_HEADER_LEN 100
+typedef struct
+{
+    unsigned char len;
+    char title[MAX_HEADER_LEN];
+} SNAP_HEADER;
+
+typedef struct
+{
+    unsigned char id;
+    unsigned char flags;
+    unsigned char flag2;
+    unsigned char reserved;
+    unsigned char sdataFlagsOne;
+    unsigned char sdataFlagsTwo;
+    unsigned char pdataFlags;
+    unsigned char reserved2;
+    IHADCB *PTR32 dcb;
+    void *PTR32 tcb;
+    void *list;
+    SNAP_HEADER *PTR32 header;
+} SNAP_PLIST;
+
 typedef OPEN_PL CLOSE_PL;
 
 int open(IHADCB *) ATTRIBUTE(amode31);
@@ -104,5 +165,6 @@ int write(IHADCB *, WRITE_PL *, char *) ATTRIBUTE(amode31);
 int check(WRITE_PL *ecb) ATTRIBUTE(amode31);
 int writeSync(IHADCB *dcb, char *) ATTRIBUTE(amode31);
 int close(IHADCB *) ATTRIBUTE(amode31);
+int snap(IHADCB *, SNAP_HEADER *, void *, void *) ATTRIBUTE(amode31);
 
 #endif
