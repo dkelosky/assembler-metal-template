@@ -131,6 +131,6 @@
 //SNAP     DD  SYSOUT=*
 //SYSPRINT DD  SYSOUT=*
 //SYSMDUMP DD  DUMMY
-//SNAPDDDD DD  SYSOUT=*
+//SNAP     DD  SYSOUT=*
 //         ENDIF
 {{/each}}

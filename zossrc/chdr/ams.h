@@ -1,8 +1,14 @@
 #ifndef AMS_H
 #define AMS_H
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
 #include "z.h"
 #include "dcbd.h"
 #include "ihaecb.h"
+#include "storage.h"
 
 #if defined(__IBM_METAL__)
 #define DCB_WRITE_MODEL(dcbwm)                                  \
@@ -16,7 +22,7 @@
 #else
 #define DCB_WRITE_MODEL(dcbwm)
 #endif
-DCB_WRITE_MODEL(model);
+DCB_WRITE_MODEL(open_model);
 
 #if defined(__IBM_METAL__)
 #define OPEN_OUTPUT(dcb, plist, rc)                             \
@@ -159,6 +165,21 @@ typedef struct
 } SNAP_PLIST;
 
 typedef OPEN_PL CLOSE_PL;
+
+static IHADCB *PTR32 newDcb(char *ddname, int lrecl, int blkSize, unsigned char recfm, char *mode)
+{
+    // TODO(Kelosky): mode is ignored
+    char ddnam[9] = {0};
+    sprintf(ddnam, "%-8.8s", ddname);
+    IHADCB *dcb = storageObtain24(sizeof(IHADCB));
+    memset(dcb, 0x00, sizeof(IHADCB));
+    memcpy(dcb, &open_model, sizeof(IHADCB));
+    memcpy(dcb->dcbddnam, ddnam, sizeof(dcb->dcbddnam));
+    dcb->dcblrecl = lrecl;
+    dcb->dcbblksi = blkSize;
+    dcb->dcbrecfm = recfm; // VBA
+    return dcb;
+}
 
 int open(IHADCB *) ATTRIBUTE(amode31);
 int write(IHADCB *, WRITE_PL *, char *) ATTRIBUTE(amode31);

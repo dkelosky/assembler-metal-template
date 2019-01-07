@@ -1,12 +1,8 @@
 #include "ams.h"
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include "wto.h"
+#include "dcbd.h"
 
 // NOTE(Kelosky): this was probably a better candidate to be done from an
 // assembler helper routine like /asmpgm/wto, but it's too late now :)
-
 int open(IHADCB *dcb)
 {
     int rc = 0;
@@ -20,7 +16,7 @@ int open(IHADCB *dcb)
     // dcb->dcbdsrg1 = 0x40;      // DSORG, DATA SET ORGANIZATION
     // dcb->dcbioba = (void *)1;  // IOBAD FOR EXCP OR RESERVED
     // dcb->dcbeoda = 1;          // EODAD (END OF DATA ROUTINE ADDRESS)
-    dcb->dcboflg = 0x02;       // OFLGS (OPEN FLAGS)
+    dcb->dcboflg = 0x02; // OFLGS (OPEN FLAGS)
     // dcb->dcbmacr2 = 0x20;      // MACR (MACRO FORMAT)
     // dcb->dcbchcka = 1;         // CHECK OR INTERNAL QSAM SYNCHRONIZING RTN.
     // dcb->dcbsyna = 1;          // SYNAD, SYNCHRONOUS ERROR RTN. (3 BYTES)

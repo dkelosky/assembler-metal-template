@@ -14,31 +14,13 @@ int main()
 {
     WTO_BUF buf = {0};
 
-    IHADCB *sysprint = storageObtain24(sizeof(IHADCB));
-    IHADCB *snapDcb = storageObtain24(sizeof(IHADCB));
+    IHADCB *sysprintDcb = newDcb("SYSPRINT", 132, 132, dcbrecf + dcbrecbr, "w");
+    IHADCB *snapDcb = newDcb("SNAP", 125, 1632, dcbrecv + dcbrecbr + dcbrecca, "w");
 
-    memset(sysprint, 0x00, sizeof(IHADCB));
-    memcpy(sysprint, &model, sizeof(IHADCB));
-
-    memset(snapDcb, 0x00, sizeof(IHADCB));
-    memcpy(snapDcb, &model, sizeof(IHADCB));
-
-    sysprint->dcbblksi = 132;
-    sysprint->dcblrecl = 132;
-    sysprint->dcbrecfm = dcbrecf + dcbrecbr; // FB
-    memset(sysprint->dcbddnam, ' ', sizeof(sysprint->dcbddnam));
-    strcpy(sysprint->dcbddnam, "SYSPRINT");
-
-    snapDcb->dcbblksi = 1632;
-    snapDcb->dcblrecl = 125;
-    snapDcb->dcbrecfm = dcbrecv + dcbrecbr + dcbrecca; // VBA
-    memset(snapDcb->dcbddnam, ' ', sizeof(snapDcb->dcbddnam));
-    strcpy(snapDcb->dcbddnam, "SNAPDDDD");
-
-    int openRc = open(sysprint);
+    int openRc = open(sysprintDcb);
     if (openRc)
         return openRc;
-    if (dcbofopn == sysprint->dcboflgs)
+    if (dcbofopn == sysprintDcb->dcboflgs)
         return 9;
 
     int snapOpenRc = open(snapDcb);
@@ -54,13 +36,16 @@ int main()
     memset(writeBuf, ' ', 132);
     char *helloMessage = "Hello world from metal c";
     memcpy(writeBuf, helloMessage, strlen(helloMessage));
-    int writeRc = writeSync(sysprint, writeBuf);
+    int writeRc = writeSync(sysprintDcb, writeBuf);
 
-    int closeRc = close(sysprint);
+    int closeRc = close(sysprintDcb);
+    int closeSnapRc = close(snapDcb);
 
     char *message = "openRc: %x, writeRc: %x, closeRc: %x";
     buf.len = sprintf(buf.msg, message, openRc, writeRc, closeRc);
     wto(&buf);
-    storageRelease24(sysprint, sizeof(IHADCB));
+
+    storageRelease24(sysprintDcb, sizeof(IHADCB));
+    storageRelease24(snapDcb, sizeof(IHADCB));
     return 0;
 }
