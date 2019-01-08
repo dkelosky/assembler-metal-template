@@ -36,10 +36,12 @@ WTO_MODEL(wtoModel); // make this copy in static storage
 #define WTO(buf, plist, rc)
 #endif
 
+#define MAX_WTO_TEXT 126
+
 typedef struct
 {
     short int len;
-    char msg[126];
+    char msg[MAX_WTO_TEXT];
 } WTO_BUF;
 
 int wto(WTO_BUF *buf)

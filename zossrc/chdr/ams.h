@@ -22,6 +22,7 @@
 #else
 #define DCB_WRITE_MODEL(dcbwm)
 #endif
+
 DCB_WRITE_MODEL(open_model);
 
 #if defined(__IBM_METAL__)
@@ -40,6 +41,60 @@ DCB_WRITE_MODEL(open_model);
         : "r0", "r1", "r14", "r15");
 #else
 #define OPEN_OUTPUT(dcb, plist, rc)
+#endif
+
+#if defined(__IBM_METAL__)
+#define OPEN_INPUT(dcb, plist, rc)                              \
+    __asm(                                                      \
+        "*                                                  \n" \
+        " OPEN (%0,(INPUT)),"                                   \
+        "TYPE=J,"                                               \
+        "MODE=31,"                                              \
+        "MF=(E,%2)                                          \n" \
+        "*                                                  \n" \
+        " ST    15,%1     Save RC                           \n" \
+        "*                                                    " \
+        : "+m"(dcb),                                            \
+          "=m"(rc)                                              \
+        : "m"(plist)                                            \
+        : "r0", "r1", "r14", "r15");
+#else
+#define OPEN_INPUT(dcb, plist, rc)
+#endif
+
+#if defined(__IBM_METAL__)
+#define RDJFCB_INPUT(dcb, plist, rc)                            \
+    __asm(                                                      \
+        "*                                                  \n" \
+        " RDJFCB (%0,(INPUT)),"                                 \
+        "MF=(E,%2)                                          \n" \
+        "*                                                  \n" \
+        " ST    15,%1     Save RC                           \n" \
+        "*                                                    " \
+        : "+m"(dcb),                                            \
+          "=m"(rc)                                              \
+        : "m"(plist)                                            \
+        : "r0", "r1", "r14", "r15");
+#else
+#define RDJFCB_INPUT(dcb, plist, rc)
+#endif
+
+#if defined(__IBM_METAL__)
+#define FIND(dcb, ddname, rc)                                   \
+    __asm(                                                      \
+        "*                                                  \n" \
+        " FIND %0,"                                             \
+        "%2,"                                                   \
+        "D                                                  \n" \
+        "*                                                  \n" \
+        " ST    15,%1     Save RC                           \n" \
+        "*                                                    " \
+        : "+m"(dcb),                                            \
+          "=m"(rc)                                              \
+        : "m"(ddname)                                           \
+        : "r0", "r1", "r14", "r15");
+#else
+#define FIND(dcb, plist, rc)
 #endif
 
 #if defined(__IBM_METAL__)
@@ -79,6 +134,28 @@ DCB_WRITE_MODEL(open_model);
         : "r0", "r1", "r14", "r15");
 #else
 #define WRITE(dcb, ecb, buf, rc)
+#endif
+
+#if defined(__IBM_METAL__)
+#define READ(dcb, ecb, buf, rc)                                 \
+    __asm(                                                      \
+        "*                                                  \n" \
+        " READ %0,"                                             \
+        "SF,"                                                   \
+        "%2,"                                                   \
+        "%3,"                                                   \
+        "'S',"                                                  \
+        "MF=E                                               \n" \
+        "*                                                  \n" \
+        " ST    15,%1     Save RC                           \n" \
+        "*                                                    " \
+        : "+m"(ecb),                                            \
+          "=m"(rc)                                              \
+        : "m"(dcb),                                             \
+          "m"(buf)                                              \
+        : "r0", "r1", "r14", "r15");
+#else
+#define READ(dcb, ecb, buf, rc)
 #endif
 
 #if defined(__IBM_METAL__)
@@ -175,17 +252,32 @@ int snap(IHADCB *, SNAP_HEADER *, void *, void *) ATTRIBUTE(amode31);
 
 static IHADCB *PTR32 newDcb(char *ddname, int lrecl, int blkSize, unsigned char recfm, char *mode)
 {
-    // TODO(Kelosky): mode is ignored
-    char ddnam[9] = {0};
-    sprintf(ddnam, "%-8.8s", ddname);
-    IHADCB *dcb = storageObtain24(sizeof(IHADCB));
-    memset(dcb, 0x00, sizeof(IHADCB));
-    memcpy(dcb, &open_model, sizeof(IHADCB));
-    memcpy(dcb->dcbddnam, ddnam, sizeof(dcb->dcbddnam));
-    dcb->dcblrecl = lrecl;
-    dcb->dcbblksi = blkSize;
-    dcb->dcbrecfm = recfm; // VBA
-    return dcb;
+    //open for write
+    if (0 == strcmp(mode, "w"))
+    {
+        char ddnam[9] = {0};
+        sprintf(ddnam, "%-8.8s", ddname);
+        IHADCB *dcb = storageObtain24(sizeof(IHADCB));
+        memset(dcb, 0x00, sizeof(IHADCB));
+        memcpy(dcb, &open_model, sizeof(IHADCB));
+        memcpy(dcb->dcbddnam, ddnam, sizeof(dcb->dcbddnam));
+        dcb->dcblrecl = lrecl;
+        dcb->dcbblksi = blkSize;
+        dcb->dcbrecfm = recfm; // VBA
+        return dcb;
+    }
+    //open for read
+    else if (0 == strcmp(mode, "r"))
+    {
+        // dbcabend
+        // synad
+        // rdjfcb
+    }
+    // abend for unknown mode
+    else
+    {
+        s0c3Abend(1);
+    }
 }
 
 static void openAssert(IHADCB *dcb)

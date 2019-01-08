@@ -132,5 +132,8 @@
 //SYSPRINT DD  SYSOUT=*
 //SYSMDUMP DD  DUMMY
 //SNAP     DD  SYSOUT=*
+//IN       DD  *
+CAN YOU SEE ME
+/*
 //         ENDIF
 {{/each}}

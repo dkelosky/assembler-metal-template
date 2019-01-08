@@ -1,13 +1,13 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+
 #include "wto.h"
 #include "storage.h"
-#include "load.h"
 #include "dcbd.h"
 #include "ams.h"
 
-// TODO(Kelosky): snap & read
+// TODO(Kelosky): read
 
 // using default prolog
 int main()
