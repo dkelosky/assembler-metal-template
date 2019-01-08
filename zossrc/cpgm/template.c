@@ -17,17 +17,8 @@ int main()
     IHADCB *sysprintDcb = newDcb("SYSPRINT", 132, 132, dcbrecf + dcbrecbr, "w");
     IHADCB *snapDcb = newDcb("SNAP", 125, 1632, dcbrecv + dcbrecbr + dcbrecca, "w");
 
-    int openRc = open(sysprintDcb);
-    if (openRc)
-        return openRc;
-    if (dcbofopn == sysprintDcb->dcboflgs)
-        return 9;
-
-    int snapOpenRc = open(snapDcb);
-    if (snapOpenRc)
-        return snapOpenRc;
-    if (dcbofopn == snapDcb->dcboflgs)
-        return 13;
+    openAssert(sysprintDcb);
+    openAssert(snapDcb);
 
     SNAP_HEADER header = {3, {"hey"}};
     snap(snapDcb, &header, (void *)0, (void *)16);
@@ -41,8 +32,8 @@ int main()
     int closeRc = close(sysprintDcb);
     int closeSnapRc = close(snapDcb);
 
-    char *message = "openRc: %x, writeRc: %x, closeRc: %x";
-    buf.len = sprintf(buf.msg, message, openRc, writeRc, closeRc);
+    char *message = "writeRc: %x, closeRc: %x";
+    buf.len = sprintf(buf.msg, message, writeRc, closeRc);
     wto(&buf);
 
     storageRelease24(sysprintDcb, sizeof(IHADCB));

@@ -166,6 +166,13 @@ typedef struct
 
 typedef OPEN_PL CLOSE_PL;
 
+int open(IHADCB *) ATTRIBUTE(amode31);
+int write(IHADCB *, WRITE_PL *, char *) ATTRIBUTE(amode31);
+int check(WRITE_PL *ecb) ATTRIBUTE(amode31);
+int writeSync(IHADCB *dcb, char *) ATTRIBUTE(amode31);
+int close(IHADCB *) ATTRIBUTE(amode31);
+int snap(IHADCB *, SNAP_HEADER *, void *, void *) ATTRIBUTE(amode31);
+
 static IHADCB *PTR32 newDcb(char *ddname, int lrecl, int blkSize, unsigned char recfm, char *mode)
 {
     // TODO(Kelosky): mode is ignored
@@ -181,11 +188,14 @@ static IHADCB *PTR32 newDcb(char *ddname, int lrecl, int blkSize, unsigned char 
     return dcb;
 }
 
-int open(IHADCB *) ATTRIBUTE(amode31);
-int write(IHADCB *, WRITE_PL *, char *) ATTRIBUTE(amode31);
-int check(WRITE_PL *ecb) ATTRIBUTE(amode31);
-int writeSync(IHADCB *dcb, char *) ATTRIBUTE(amode31);
-int close(IHADCB *) ATTRIBUTE(amode31);
-int snap(IHADCB *, SNAP_HEADER *, void *, void *) ATTRIBUTE(amode31);
+static void openAssert(IHADCB *dcb)
+{
+    int rc = 0;
+    rc = open(dcb);
+    if (rc)
+        s0c3Abend(1);
+    if (!(dcbofopn & dcb->dcboflgs))
+        s0c3Abend(2);
+}
 
 #endif
