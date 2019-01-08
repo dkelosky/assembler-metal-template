@@ -10,6 +10,7 @@
     "genjcl": "node ./scripts/lib/genjcl",
     "genjcl:convert": "node ./scripts/lib/convert",
     "genjcl:template": "node ./scripts/lib/genjcl compile/template assemble/template bind/template execute",
+    "genjcl:ams": "node ./scripts/lib/genjcl compile/ams assemble/ams bind/template execute",
     "upload": "node ./scripts/lib/upload",
     "purge": "node ./scripts/lib/purge",
     "jcl": "zowe jobs submit lf \"./build/custom.jcl\" --directory \"./output\"",

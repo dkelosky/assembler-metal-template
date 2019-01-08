@@ -1,9 +1,0 @@
-         MACRO ,
-.*
-.*       DSA DSECT entry
-.*
-         #DSANTRY
-.*
-                 ORG   DSAREUS         Backup to DSAREUS
-.*
-         MEND  ,                       Exit macro

@@ -16,7 +16,7 @@
         "*                                                  \n" \
         " DCB DDNAME=*-*,"                                      \
         "DSORG=PS,"                                             \
-        "MACRF=W                                          \n"   \
+        "MACRF=W                                            \n" \
         "*                                                    " \
         : "DS"(dcbwm));
 #else
@@ -28,7 +28,7 @@ DCB_WRITE_MODEL(open_model);
 #define OPEN_OUTPUT(dcb, plist, rc)                             \
     __asm(                                                      \
         "*                                                  \n" \
-        " OPEN  (%0,(OUTPUT)),"                                 \
+        " OPEN (%0,(OUTPUT)),"                                  \
         "MODE=31,"                                              \
         "MF=(E,%2)                                          \n" \
         "*                                                  \n" \
@@ -46,7 +46,7 @@ DCB_WRITE_MODEL(open_model);
 #define CLOSE(dcb, plist, rc)                                   \
     __asm(                                                      \
         "*                                                  \n" \
-        " CLOSE  (%0),"                                         \
+        " CLOSE (%0),"                                          \
         "MODE=31,"                                              \
         "MF=(E,%2)                                          \n" \
         "*                                                  \n" \
@@ -68,7 +68,7 @@ DCB_WRITE_MODEL(open_model);
         "SF,"                                                   \
         "%2,"                                                   \
         "%3,"                                                   \
-        "MF=E                                              \n"  \
+        "MF=E                                               \n" \
         "*                                                  \n" \
         " ST    15,%1     Save RC                           \n" \
         "*                                                    " \

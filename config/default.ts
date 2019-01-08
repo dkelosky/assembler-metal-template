@@ -49,7 +49,6 @@ export default {
                     // override options here
                 },
                 AMS: {},
-                WTO: {},
             },
         },
 
@@ -61,7 +60,6 @@ export default {
                 TEMPLATE: {
                     includes: [
                         "AMS",
-                        "WTO",
                     ]
                     // override options here
                 }
