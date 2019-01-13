@@ -11,7 +11,7 @@
 //*
 //         IF (RC = 0) THEN
 //MTL{{@index}} EXEC PGM=CCNDRVR,
-//          PARM=('OPTFILE(DD:OPTIONS)', 
+//          PARM=('OPTFILE(DD:OPTIONS)',
 //         'LIST(DD:LISTOUT)')
 //OPTIONS  DD  *
 {{!-- if options at this object level, use them  --}}

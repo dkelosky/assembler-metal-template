@@ -23,7 +23,22 @@
 #define DCB_WRITE_MODEL(dcbwm)
 #endif
 
-DCB_WRITE_MODEL(open_model);
+DCB_WRITE_MODEL(openWriteModel);
+
+#if defined(__IBM_METAL__)
+#define DCB_READ_MODEL(dcbrm)                                   \
+    __asm(                                                      \
+        "*                                                  \n" \
+        " DCB DDNAME=*-*,"                                      \
+        "DSORG=PS,"                                             \
+        "MACRF=R                                            \n" \
+        "*                                                    " \
+        : "DS"(dcbrm));
+#else
+#define DCB_READ_MODEL(dcbrm)
+#endif
+
+DCB_READ_MODEL(openReadModel);
 
 #if defined(__IBM_METAL__)
 #define OPEN_OUTPUT(dcb, plist, rc)                             \
@@ -207,12 +222,6 @@ typedef struct
     IHADCB *PTR32 dcb;
 } OPEN_PL;
 
-typedef struct
-{
-    unsigned char option;
-    unsigned char reserved[3];
-    IHADCB *PTR32 dcb;
-} READ_PL;
 
 typedef struct
 {
@@ -266,8 +275,10 @@ typedef struct
 
 typedef OPEN_PL CLOSE_PL;
 
-int open(IHADCB *) ATTRIBUTE(amode31);
+int openOutput(IHADCB *) ATTRIBUTE(amode31);
+int openInput(IHADCB *) ATTRIBUTE(amode31);
 int write(IHADCB *, WRITE_PL *, char *) ATTRIBUTE(amode31);
+int read(IHADCB *, READ_PL *, char *) ATTRIBUTE(amode31);
 int check(WRITE_PL *ecb) ATTRIBUTE(amode31);
 int writeSync(IHADCB *dcb, char *) ATTRIBUTE(amode31);
 int close(IHADCB *) ATTRIBUTE(amode31);
@@ -282,11 +293,11 @@ static IHADCB *PTR32 newDcb(char *ddname, int lrecl, int blkSize, unsigned char 
         sprintf(ddnam, "%-8.8s", ddname);
         IHADCB *dcb = storageObtain24(sizeof(IHADCB));
         memset(dcb, 0x00, sizeof(IHADCB));
-        memcpy(dcb, &open_model, sizeof(IHADCB));
+        memcpy(dcb, &openWriteModel, sizeof(IHADCB));
         memcpy(dcb->dcbddnam, ddnam, sizeof(dcb->dcbddnam));
         dcb->dcblrecl = lrecl;
         dcb->dcbblksi = blkSize;
-        dcb->dcbrecfm = recfm; // VBA
+        dcb->dcbrecfm = recfm;
         return dcb;
     }
     //open for read
@@ -295,6 +306,16 @@ static IHADCB *PTR32 newDcb(char *ddname, int lrecl, int blkSize, unsigned char 
         // dbcabend
         // synad
         // rdjfcb
+        char ddnam[9] = {0};
+        sprintf(ddnam, "%-8.8s", ddname);
+        IHADCB *dcb = storageObtain24(sizeof(IHADCB));
+        memset(dcb, 0x00, sizeof(IHADCB));
+        memcpy(dcb, &openReadModel, sizeof(IHADCB));
+        memcpy(dcb->dcbddnam, ddnam, sizeof(dcb->dcbddnam));
+        dcb->dcblrecl = lrecl;
+        dcb->dcbblksi = blkSize;
+        dcb->dcbrecfm = recfm;
+        return dcb;
     }
     // abend for unknown mode
     else
@@ -303,10 +324,20 @@ static IHADCB *PTR32 newDcb(char *ddname, int lrecl, int blkSize, unsigned char 
     }
 }
 
-static void openAssert(IHADCB *dcb)
+static void openOutputAssert(IHADCB *dcb)
 {
     int rc = 0;
-    rc = open(dcb);
+    rc = openOutput(dcb);
+    if (rc)
+        s0c3Abend(1);
+    if (!(dcbofopn & dcb->dcboflgs))
+        s0c3Abend(2);
+}
+
+static void openInputAssert(IHADCB *dcb)
+{
+    int rc = 0;
+    rc = openInput(dcb);
     if (rc)
         s0c3Abend(1);
     if (!(dcbofopn & dcb->dcboflgs))

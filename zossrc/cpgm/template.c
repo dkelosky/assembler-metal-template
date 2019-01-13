@@ -7,8 +7,6 @@
 #include "dcbd.h"
 #include "ams.h"
 
-// TODO(Kelosky): read
-
 // using default prolog
 int main()
 {
@@ -16,9 +14,11 @@ int main()
 
     IHADCB *sysprintDcb = newDcb("SYSPRINT", 132, 132, dcbrecf + dcbrecbr, "w");
     IHADCB *snapDcb = newDcb("SNAP", 125, 1632, dcbrecv + dcbrecbr + dcbrecca, "w");
+    IHADCB *inDcb = newDcb("IN", 80, 80, dcbrecf + dcbrecbr, "r");
 
-    openAssert(sysprintDcb);
-    openAssert(snapDcb);
+    openOutputAssert(sysprintDcb);
+    openOutputAssert(snapDcb);
+    openInputAssert(inDcb);
 
     SNAP_HEADER header = {3, {"hey"}};
     snap(snapDcb, &header, (void *)0, (void *)16);
