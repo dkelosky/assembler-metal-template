@@ -1,7 +1,7 @@
 #include "ams.h"
 #include "dcbd.h"
 
-int openOuput(IHADCB *dcb)
+int openOutput(IHADCB *dcb)
 {
     int rc = 0;
     OPEN_PL opl = {0};
@@ -36,10 +36,10 @@ int write(IHADCB *dcb, WRITE_PL *wpl, char *buffer)
     return rc;
 }
 
-int check(WRITE_PL *wpl)
+int check(CHECK_PL *cpl)
 {
     int rc = 0;
-    CHECK(*wpl, rc)
+    CHECK(*cpl, rc)
     return rc;
 }
 

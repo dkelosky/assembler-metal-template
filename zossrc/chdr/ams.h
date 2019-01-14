@@ -58,12 +58,12 @@ DCB_READ_MODEL(openReadModel);
 #define OPEN_OUTPUT(dcb, plist, rc)
 #endif
 
+// TODO(Kelosky): "TYPE=J,"
 #if defined(__IBM_METAL__)
 #define OPEN_INPUT(dcb, plist, rc)                              \
     __asm(                                                      \
         "*                                                  \n" \
         " OPEN (%0,(INPUT)),"                                   \
-        "TYPE=J,"                                               \
         "MODE=31,"                                              \
         "MF=(E,%2)                                          \n" \
         "*                                                  \n" \
@@ -222,22 +222,11 @@ typedef struct
     IHADCB *PTR32 dcb;
 } OPEN_PL;
 
-
 typedef struct
 {
     unsigned char option;
     unsigned char reserved[3];
 } RDJFCB_PL;
-typedef struct
-{
-    ECB ecb;
-    unsigned char typeField1;
-    unsigned char typeField2;
-    short int length;
-    IHADCB *PTR32 dcb;
-    char *PTR32 buffer;
-    unsigned char *PTR32 record;
-} WRITE_PL;
 
 typedef struct
 {
@@ -248,7 +237,10 @@ typedef struct
     IHADCB *PTR32 dcb;
     char *PTR32 buffer;
     unsigned char *PTR32 record;
-} READ_PL;
+} CHECK_PL;
+
+typedef CHECK_PL WRITE_PL;
+typedef CHECK_PL READ_PL;
 
 #define MAX_HEADER_LEN 100
 typedef struct
@@ -279,49 +271,46 @@ int openOutput(IHADCB *) ATTRIBUTE(amode31);
 int openInput(IHADCB *) ATTRIBUTE(amode31);
 int write(IHADCB *, WRITE_PL *, char *) ATTRIBUTE(amode31);
 int read(IHADCB *, READ_PL *, char *) ATTRIBUTE(amode31);
-int check(WRITE_PL *ecb) ATTRIBUTE(amode31);
+int check(CHECK_PL *ecb) ATTRIBUTE(amode31);
 int writeSync(IHADCB *dcb, char *) ATTRIBUTE(amode31);
+int readSync(IHADCB *dcb, char *) ATTRIBUTE(amode31);
 int close(IHADCB *) ATTRIBUTE(amode31);
 int snap(IHADCB *, SNAP_HEADER *, void *, void *) ATTRIBUTE(amode31);
 
+// TODO(Kelosky): dbcabend
+// TODO(Kelosky): synad
+// TODO(Kelosky): rdjfcb
+// TODO(Kelosky): eodad
+
+// TODO(Kelosky): call this method after rdjfcb to set lrelc, blksize, recfm, and PO
 static IHADCB *PTR32 newDcb(char *ddname, int lrecl, int blkSize, unsigned char recfm, char *mode)
 {
+    char ddnam[9] = {0};
+    sprintf(ddnam, "%-8.8s", ddname);
+    IHADCB *dcb = storageObtain24(sizeof(IHADCB));
+    memset(dcb, 0x00, sizeof(IHADCB));
+
     //open for write
     if (0 == strcmp(mode, "w"))
     {
-        char ddnam[9] = {0};
-        sprintf(ddnam, "%-8.8s", ddname);
-        IHADCB *dcb = storageObtain24(sizeof(IHADCB));
-        memset(dcb, 0x00, sizeof(IHADCB));
         memcpy(dcb, &openWriteModel, sizeof(IHADCB));
-        memcpy(dcb->dcbddnam, ddnam, sizeof(dcb->dcbddnam));
-        dcb->dcblrecl = lrecl;
-        dcb->dcbblksi = blkSize;
-        dcb->dcbrecfm = recfm;
-        return dcb;
     }
     //open for read
     else if (0 == strcmp(mode, "r"))
     {
-        // dbcabend
-        // synad
-        // rdjfcb
-        char ddnam[9] = {0};
-        sprintf(ddnam, "%-8.8s", ddname);
-        IHADCB *dcb = storageObtain24(sizeof(IHADCB));
-        memset(dcb, 0x00, sizeof(IHADCB));
         memcpy(dcb, &openReadModel, sizeof(IHADCB));
-        memcpy(dcb->dcbddnam, ddnam, sizeof(dcb->dcbddnam));
-        dcb->dcblrecl = lrecl;
-        dcb->dcbblksi = blkSize;
-        dcb->dcbrecfm = recfm;
-        return dcb;
     }
     // abend for unknown mode
     else
     {
         s0c3Abend(1);
     }
+
+    memcpy(dcb->dcbddnam, ddnam, sizeof(dcb->dcbddnam));
+    dcb->dcblrecl = lrecl;
+    dcb->dcbblksi = blkSize;
+    dcb->dcbrecfm = recfm;
+    return dcb;
 }
 
 static void openOutputAssert(IHADCB *dcb)
