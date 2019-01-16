@@ -86,6 +86,7 @@ export default {
                 DCBD: {
                     // override options here
                 },
+                IHADCBE: {},
                 IHAECB: {},
                 JFCB: {},
             },

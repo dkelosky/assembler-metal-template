@@ -1,9 +1,10 @@
 #ifndef STORAGE_H
 #define STORAGE_H
 #include <stdio.h>
+#include "z.h"
 
 #if defined(__IBM_METAL__)
-#define STORAGE_OBTAIN_24(addr, size)                           \
+#define STORAGE_OBTAIN(addr, size, loc)                         \
     __asm(                                                      \
         "*                                                  \n" \
         " LLGF  0,%1      = storage length                  \n" \
@@ -11,7 +12,7 @@
         " STORAGE OBTAIN,"                                      \
         "LENGTH=(0),"                                           \
         "CALLRKY=YES,"                                          \
-        "LOC=(24,64),"                                          \
+        "LOC=(" #loc ",64),"                                    \
         "COND=NO                                            \n" \
         "*                                                  \n" \
         " ST    1,%0      -> Save storage address           \n" \
@@ -20,11 +21,11 @@
         : "m"(size)                                             \
         : "r0", "r1", "r14", "r15");
 #else
-#define STORAGE_OBTAIN_24(addr, size)
+#define STORAGE_OBTAIN(addr, size, loc)
 #endif
 
 #if defined(__IBM_METAL__)
-#define STORAGE_RELEASE_24(addr, size)                          \
+#define STORAGE_RELEASE(addr, size)                             \
     __asm(                                                      \
         "*                                                  \n" \
         " LLGF  0,%1      = storage length                  \n" \
@@ -40,18 +41,16 @@
         : "m"(addr), "m"(size)                                  \
         : "r0", "r1", "r14", "r15");
 #else
-#define STORAGE_RELEASE_24(addr, size)
+#define STORAGE_RELEASE(addr, size)
 #endif
 
 #if defined(__IBM_METAL__)
 #define IARST64_GET(size, areaaddr)                             \
     __asm(                                                      \
         "*                                                  \n" \
-        " LG   2,%1         Get size of storage             \n" \
-        "*                                                  \n" \
         " IARST64 REQUEST=GET,"                                 \
         "AREAADDR=%0,"                                          \
-        "SIZE=(2),"                                             \
+        "SIZE=%1,"                                              \
         "COMMON=NO,"                                            \
         "OWNINGTASK=CURRENT,"                                   \
         "FPROT=NO,"                                             \
@@ -60,10 +59,10 @@
         "FAILMODE=ABEND,"                                       \
         "REGS=SAVE                                          \n" \
         "*                                                    " \
-        : "=m"(*areaaddr)                                       \
-        : "m"(*size)                                            \
+        : "=m"(areaaddr)                                        \
+        : "m"(size)                                             \
         \ 
-: "r0", "r1", "r2", "r14", "r15");
+: "r0", "r1", "r14", "r15");
 #else
 #define IARST64_GET(size, areaaddr)
 #endif
@@ -77,37 +76,42 @@
         "REGS=SAVE                                          \n" \
         "*                                                    " \
         :                                                       \
-        : "m"(*areaaddr)                                        \
+        : "m"(areaaddr)                                         \
         : "r0", "r1", "r14", "r15");
 #else
 #define IARST64_FREE(areaaddr)
 #endif
 
-static void *__ptr32 storageObtain24(int size)
+static void *PTR32 storageObtain24(int size)
 {
-    void *__ptr32 addr = NULL;
-    STORAGE_OBTAIN_24(addr, size);
+    void *PTR32 addr = NULL;
+    STORAGE_OBTAIN(addr, size, 24);
     return addr;
 }
 
-static void storageRelease24(void *__ptr32 addr, int size)
+static void *PTR32 storageObtain31(int size)
 {
-    STORAGE_RELEASE_24(addr, size);
+    void *PTR32 addr = NULL;
+    STORAGE_OBTAIN(addr, size, 31);
+    return addr;
 }
 
-// IARST64 get 64-bit storage
-static void *__ptr64 storageGet64(int size)
+static void storageRelease(void *PTR32 addr, int size)
 {
-    void *__ptr64 storage = NULL;
+    STORAGE_RELEASE(addr, size);
+}
 
-    int *storageSize = &size;
-    IARST64_GET(&storageSize, &storage);
+static void *PTR64 storageGet64(int size)
+{
+    void *PTR64 storage = NULL;
+
+    IARST64_GET(size, storage);
     return storage;
 }
 
-// IARST64 free 64-bit storage
-static void storageFree64(void *__ptr64 storage)
+static void storageFree64(void *PTR64 storage)
 {
-    IARST64_FREE(&storage);
+    IARST64_FREE(storage);
 }
+
 #endif

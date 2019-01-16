@@ -6,12 +6,16 @@
 // on z
 #define ATTRIBUTE(mode) __attribute__((mode))
 #define PTR32 __ptr32
+#define PTR64 __ptr64
+#define ASMREG(register) __asm(register)
 
 #else
 
 // off z
 #define ATTRIBUTE(mode)
 #define PTR32
+#define PTR64
+#define ASMREG(register)
 
 #endif
 
