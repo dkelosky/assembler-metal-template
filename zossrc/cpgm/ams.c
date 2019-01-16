@@ -109,7 +109,7 @@ int readSync(IHADCB *dcb, char *buffer)
             //     return rc;
             // }
 
-            // rc = check(&ioc->decb);
+            rc = check(&ioc->decb);
 
             if (rc)
             {
@@ -134,5 +134,6 @@ int readSync(IHADCB *dcb, char *buffer)
 // the read/check was called.
 void eodad()
 {
+    s0c3Abend(32);
     fc->eod = 1;
 }

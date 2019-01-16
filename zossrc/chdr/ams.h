@@ -206,8 +206,8 @@ DCB_READ_MODEL(openReadModel);
         "*                                                  \n" \
         " ST    15,%1     Save RC                           \n" \
         "*                                                    " \
-        : "=m"(rc)                                              \
-        : "m"(ecb)                                              \
+        : "=m"(ecb)                                              \
+        : "m"(rc)                                              \
         : "r0", "r1", "r14", "r15");
 #else
 #define CHECK(ecb, rc)
