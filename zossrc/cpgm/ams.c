@@ -80,10 +80,10 @@ int readSync(IHADCB *dcb, char *buffer)
     int rc = 0;
     IO_CTRL *ioc = (IO_CTRL *)dcb;
 
-    // if (dcb->dcbdcbe)
-    // {
+    if (dcb->dcbdcbe)
+    {
         // file control begins at DCBE address
-        // fc = (FILE_CTRL *)dcb->dcbdcbe;
+        fc = (FILE_CTRL *)dcb->dcbdcbe;
 
         // if (fc->bufferCtrl) // get a record from the buffer
         // {
@@ -123,11 +123,11 @@ int readSync(IHADCB *dcb, char *buffer)
         }
 
         // }
-    // }
-    // else
-    // {
-    //     s0c3Abend(DCBE_REQUIRED);
-    // }
+    }
+    else
+    {
+        s0c3Abend(DCBE_REQUIRED);
+    }
 }
 
 // NOTE(Kelosky): registers 2-12 should be the same as the time

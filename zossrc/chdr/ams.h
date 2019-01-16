@@ -346,17 +346,17 @@ static IHADCB *PTR32 newDcb(char *ddname, int lrecl, int blkSize, unsigned char 
         FILE_CTRL *fc = storageObtain24(ctrlLen);
         memset(fc, 0x00, ctrlLen);
 
-        // // init file control
-        // fc->ctrlLen = ctrlLen;
-        // fc->bufferLen = dcb->dcbblksi;
-        // fc->buffer = (unsigned char *)fc + sizeof(DCBE);
+        // init file control
+        fc->ctrlLen = ctrlLen;
+        fc->bufferLen = dcb->dcbblksi;
+        fc->buffer = (unsigned char *)fc + sizeof(DCBE);
 
-        // fc->dcbe.dcbelen = 56;
-        // memcpy(fc->dcbe.dcbeid, "DCBE", 4);
+        fc->dcbe.dcbelen = 56;
+        memcpy(fc->dcbe.dcbeid, "DCBE", 4);
 
-        // // retain access to DCB / file control
-        // fc->dcbe.dcbeeoda = (void *)eodad;
-        // dcb->dcbdcbe = &fc->dcbe;
+        // retain access to DCB / file control
+        fc->dcbe.dcbeeoda = (void *)eodad;
+        dcb->dcbdcbe = &fc->dcbe;
     }
     // abend for unknown mode
     else
