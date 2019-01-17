@@ -294,15 +294,28 @@ typedef struct
 
 typedef OPEN_PL CLOSE_PL;
 
+
+// 8-char entry points for z
+#if defined(__IBM_METAL__)
+#pragma map(openOutputAssert, "opnoasrt")
+#pragma map(openInputAssert, "opniasrt")
+#endif
+
+// API methods
+IO_CTRL *PTR32 openOutputAssert(char *, int, int, unsigned char) ATTRIBUTE(amode31);
+IO_CTRL *PTR32 openInputAssert(char *, int, int, unsigned char) ATTRIBUTE(amode31);
+void closeAssert(IO_CTRL *) ATTRIBUTE(amode31);
+
+int writeSync(IO_CTRL *, char *) ATTRIBUTE(amode31);
+int readSync(IO_CTRL *, char *) ATTRIBUTE(amode31);
+
+// individual api methods
 int openOutput(IHADCB *) ATTRIBUTE(amode31);
 int openInput(IHADCB *) ATTRIBUTE(amode31);
 
 int write(IHADCB *, WRITE_PL *, char *) ATTRIBUTE(amode31);
 void read(IHADCB *, READ_PL *, char *) ATTRIBUTE(amode31);
 int check(DECB *ecb) ATTRIBUTE(amode31);
-
-int writeSync(IO_CTRL *, char *) ATTRIBUTE(amode31);
-int readSync(IO_CTRL *dcb, char *) ATTRIBUTE(amode31);
 
 int close(IHADCB *) ATTRIBUTE(amode31);
 
@@ -325,106 +338,5 @@ enum AMS_ERR
 // TODO(Kelosky): dbcabend
 // TODO(Kelosky): synad
 // TODO(Kelosky): rdjfcb
-
-static IO_CTRL *PTR32 newIoCtrl()
-{
-    IO_CTRL *ioc = storageObtain24(sizeof(IO_CTRL));
-    memset(ioc, 0x00, sizeof(IO_CTRL));
-    return ioc;
-}
-
-static void setDcbInfo(IHADCB *PTR32 dcb, char *ddname, int lrecl, int blkSize, unsigned char recfm)
-{
-    char ddnam[9] = {0};
-    sprintf(ddnam, "%-8.8s", ddname);
-    memcpy(dcb->dcbddnam, ddnam, sizeof(dcb->dcbddnam));
-    dcb->dcblrecl = lrecl;
-    dcb->dcbblksi = blkSize;
-    dcb->dcbrecfm = recfm;
-}
-
-static void setDcbDcbe(IHADCB *PTR32 dcb)
-{
-    // get space for DCBE + buffer
-    short ctrlLen = sizeof(FILE_CTRL) + dcb->dcbblksi;
-    FILE_CTRL *fc = storageObtain31(ctrlLen);
-    memset(fc, 0x00, ctrlLen);
-
-    // init file control
-    fc->ctrlLen = ctrlLen;
-    fc->bufferLen = dcb->dcbblksi;
-    fc->buffer = (unsigned char *)fc + sizeof(DCBE);
-
-    // init DCBE
-    fc->dcbe.dcbelen = 56;
-    memcpy(fc->dcbe.dcbeid, "DCBE", 4);
-
-    // retain access to DCB / file control
-    fc->dcbe.dcbeeoda = (void *)eodad;
-    dcb->dcbdcbe = fc;
-}
-
-static IO_CTRL *PTR32 newWriteIoCtrl(char *ddname, int lrecl, int blkSize, unsigned char recfm)
-{
-    IO_CTRL *ioc = newIoCtrl();
-    IHADCB *dcb = &ioc->dcb;
-    memcpy(dcb, &openWriteModel, sizeof(IHADCB));
-    setDcbInfo(dcb, ddname, lrecl, blkSize, recfm);
-    return ioc;
-}
-
-static IO_CTRL *PTR32 newReadIoCtrl(char *ddname, int lrecl, int blkSize, unsigned char recfm)
-{
-    IO_CTRL *ioc = newIoCtrl();
-    IHADCB *dcb = &ioc->dcb;
-    memcpy(dcb, &openReadModel, sizeof(IHADCB));
-    setDcbInfo(dcb, ddname, lrecl, blkSize, recfm);
-    setDcbDcbe(dcb);
-    return ioc;
-}
-
-static IO_CTRL *PTR32 openOutputAssert(char *ddname, int lrecl, int blkSize, unsigned char recfm)
-{
-    IO_CTRL *ioc = newWriteIoCtrl(ddname, lrecl, blkSize, recfm);
-    IHADCB *dcb = &ioc->dcb;
-    int rc = 0;
-    rc = openOutput(dcb);
-    if (rc)
-        s0c3Abend(OPEN_OUTPUT_ASSERT_RC);
-    if (!(dcbofopn & dcb->dcboflgs))
-        s0c3Abend(OPEN_OUTPUT_ASSERT_FAIL);
-
-    return ioc;
-}
-
-static IO_CTRL *PTR32 openInputAssert(char *ddname, int lrecl, int blkSize, unsigned char recfm)
-{
-    IO_CTRL *ioc = newReadIoCtrl(ddname, lrecl, blkSize, recfm);
-    IHADCB *dcb = &ioc->dcb;
-    int rc = 0;
-    rc = openInput(dcb);
-    if (rc)
-        s0c3Abend(OPEN_INPUT_ASSERT_RC);
-    if (!(dcbofopn & dcb->dcboflgs))
-        s0c3Abend(OPEN_INPUT_ASSERT_FAIL);
-    return ioc;
-}
-
-static void closeAssert(IO_CTRL *PTR32 ioc)
-{
-    IHADCB *dcb = &ioc->dcb;
-    int rc = close(dcb);
-    if (rc)
-        s0c3Abend(CLOSE_ASSERT_RC);
-
-    // free DCBE / file control if obtained
-    if (dcb->dcbdcbe)
-    {
-        FILE_CTRL *fc = dcb->dcbdcbe;
-        storageRelease(fc, fc->ctrlLen);
-    }
-
-    storageRelease(ioc, sizeof(IO_CTRL));
-}
 
 #endif
