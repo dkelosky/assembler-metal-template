@@ -272,7 +272,7 @@ typedef struct
     unsigned char reserved2;
     IHADCB *PTR32 dcb;
     void *PTR32 tcb;
-    void *list;
+    void *PTR32 list;
     SNAP_HEADER *PTR32 header;
 } SNAP_PLIST;
 
@@ -281,7 +281,7 @@ typedef struct
     DCBE dcbe;
     short ctrlLen;
     short bufferLen;
-    char *buffer;
+    char *PTR32 buffer;
     int bufferCtrl;
     unsigned int eod : 1;
 } FILE_CTRL;
@@ -342,13 +342,13 @@ static IHADCB *PTR32 newDcb(char *ddname, int lrecl, int blkSize, unsigned char 
         memcpy(dcb, &openReadModel, sizeof(IHADCB));
 
         // get space for DCBE + buffer
-        short ctrlLen = sizeof(FILE_CTRL) + dcb->dcbblksi;
+        short ctrlLen = sizeof(FILE_CTRL) + blkSize;
         FILE_CTRL *fc = storageObtain31(ctrlLen);
         memset(fc, 0x00, ctrlLen);
 
         // init file control
         fc->ctrlLen = ctrlLen;
-        fc->bufferLen = dcb->dcbblksi;
+        fc->bufferLen = blkSize;
         fc->buffer = (unsigned char *)fc + sizeof(DCBE);
 
         // init DCBE

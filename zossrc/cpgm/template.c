@@ -20,10 +20,6 @@ int main()
     IHADCB *snapDcb = openOutputAssert("SNAP", 125, 1632, dcbrecv + dcbrecbr + dcbrecca);
     IHADCB *inDcb = openInputAssert("IN", 80, 80, dcbrecf); // + dcbrecbr);
 
-    // snap
-    SNAP_HEADER header = {3, {"hey"}};
-    snap(snapDcb, &header, (void *)0, (void *)16);
-
     // write
     char writeBuf[132] = {0};
     memset(writeBuf, ' ', 132);
@@ -32,7 +28,7 @@ int main()
     int writeRc = writeSync(sysprintDcb, writeBuf);
 
     int readRc = 0;
-        // read
+    // read
 
     memset(inbuff, 0x00, 80);
     readRc = readSync(inDcb, inbuff);
@@ -57,6 +53,10 @@ int main()
     fc = (FILE_CTRL *)inDcb->dcbdcbe;
     buf.len = sprintf(buf.msg, "hello world %x", fc->eod);
     wto(&buf);
+
+    // snap
+    SNAP_HEADER header = {3, {"hey"}};
+    snap(snapDcb, &header, fc, (unsigned char *)fc + sizeof(FILE_CTRL));
 
     // close
     closeAssert(sysprintDcb);

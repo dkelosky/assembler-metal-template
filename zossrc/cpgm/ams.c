@@ -92,18 +92,12 @@ int readSync(IHADCB *dcb, char *buffer)
     if (dcb->dcbdcbe)
     {
         // file control begins at DCBE address
-        fc = (FILE_CTRL *)dcb->dcbdcbe;
+        fc = dcb->dcbdcbe;
 
         // fixed only records until rdjfcb
         if (dcbrecf == dcb->dcbrecfm)
         {
             read(dcb, &ioc->decb, buffer);
-
-            // if (rc)
-            // {
-            //     s0c3Abend(15);
-            //     return rc;
-            // }
 
             rc = check(&ioc->decb);
             if (fc->eod)
