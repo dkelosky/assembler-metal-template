@@ -206,7 +206,6 @@ int readSync(IO_CTRL *ioc, char *buffer)
             if (fc->eod)
             {
                 return -1;
-                s0c3Abend(13);
             }
             if (rc)
             {
@@ -224,10 +223,9 @@ int readSync(IO_CTRL *ioc, char *buffer)
     }
 }
 
-// NOTE(Kelosky): registers 2-12 should be the same as the time
+// NOTE(Kelosky): registers 2-13 should be the same as the time
 // the read/check was called for non-VSAM end of data exit.
 void eodad()
 {
     fc->eod = 1;
-    // s0c3Abend(48);
 }
