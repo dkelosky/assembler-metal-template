@@ -140,6 +140,8 @@ int write(IHADCB *dcb, WRITE_PL *wpl, char *buffer)
     return rc;
 }
 
+// NOTE(Kelosky): simple function that is non inline so that when
+// it is called, NAB will be set.
 void forceNab() ATTRIBUTE(noinline);
 void forceNab()
 {
@@ -149,7 +151,7 @@ void forceNab()
 int check(DECB *cpl)
 {
     int rc = 0;
-    forceNab(); // TODO(Kelosky): force no inline
+    forceNab();
     CHECK(*cpl, rc)
     rc = 0;
     return rc;
@@ -161,7 +163,6 @@ void read(IHADCB *dcb, READ_PL *rpl, char *buffer)
     int rc = 0;
     memset(rpl, 0x00, sizeof(READ_PL));
     READ(*dcb, *rpl, *buffer, rc);
-    // return rc;
 }
 
 int close(IHADCB *dcb)
