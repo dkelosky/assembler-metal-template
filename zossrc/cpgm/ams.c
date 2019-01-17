@@ -47,7 +47,7 @@ void forceNab()
 int check(DECB *cpl)
 {
     int rc = 0;
-    forceNab();
+    forceNab(); // TODO(Kelosky): force no inline
     CHECK(*cpl, rc)
     rc = 0;
     return rc;
@@ -71,23 +71,24 @@ int close(IHADCB *dcb)
     return rc;
 }
 
-int writeSync(IHADCB *dcb, char *buffer)
+int writeSync(IO_CTRL *ioc, char *buffer)
 {
     int rc = 0;
-    WRITE_PL wpl = {0};
-    rc = write(dcb, &wpl, buffer);
+    WRITE_PL *wpl = &ioc->decb;
+    rc = write(&ioc->dcb, wpl, buffer);
     if (rc)
     {
         return rc;
     }
 
-    return check(&wpl);
+    return check(&ioc->decb);
 }
 
-int readSync(IHADCB *dcb, char *buffer)
+int readSync(IO_CTRL *ioc, char *buffer)
 {
     int rc = 0;
-    IO_CTRL *ioc = (IO_CTRL *)dcb;
+    READ_PL *rpl = &ioc->decb;
+    IHADCB *dcb = &ioc->dcb;
 
     if (dcb->dcbdcbe)
     {
@@ -97,9 +98,9 @@ int readSync(IHADCB *dcb, char *buffer)
         // fixed only records until rdjfcb
         if (dcbrecf == dcb->dcbrecfm)
         {
-            read(dcb, &ioc->decb, buffer);
+            read(dcb, rpl, buffer);
 
-            rc = check(&ioc->decb);
+            rc = check(rpl);
             if (fc->eod)
             {
                 return -1;
