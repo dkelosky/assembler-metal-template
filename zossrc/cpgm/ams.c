@@ -34,14 +34,22 @@ int snap(IHADCB *dcb, SNAP_HEADER *header, void *start, void *end)
 int write(IHADCB *dcb, WRITE_PL *wpl, char *buffer)
 {
     int rc = 0;
+    memset(wpl, 0x00, sizeof(WRITE_PL));
     WRITE(*dcb, *wpl, *buffer, rc);
     return rc;
+}
+
+void forceNab()
+{
+    return;
 }
 
 int check(DECB *cpl)
 {
     int rc = 0;
+    forceNab();
     CHECK(*cpl, rc)
+    rc = 0;
     return rc;
 }
 
@@ -49,6 +57,7 @@ void read(IHADCB *dcb, READ_PL *rpl, char *buffer)
 {
     // NOTE(Kelosky): READ does not appear to give an RC
     int rc = 0;
+    memset(rpl, 0x00, sizeof(READ_PL));
     READ(*dcb, *rpl, *buffer, rc);
     // return rc;
 }
@@ -85,24 +94,11 @@ int readSync(IHADCB *dcb, char *buffer)
         // file control begins at DCBE address
         fc = (FILE_CTRL *)dcb->dcbdcbe;
 
-        // if (fc->bufferCtrl) // get a record from the buffer
-        // {
-        // }
-        // else // read into buffer
-        // {
-
         // fixed only records until rdjfcb
         if (dcbrecf == dcb->dcbrecfm)
         {
-            // NOTE(Kelosky): a call to read will set a NAB so
-            // our end of data function (eodad) should be able to advance the
-            // stack
             read(dcb, &ioc->decb, buffer);
-            // if (fc->eod)
-            // {
-            //     return -1;
-            //     s0c3Abend(13);
-            // }
+
             // if (rc)
             // {
             //     s0c3Abend(15);
@@ -110,10 +106,13 @@ int readSync(IHADCB *dcb, char *buffer)
             // }
 
             rc = check(&ioc->decb);
-
+            if (fc->eod)
+            {
+                return -1;
+                s0c3Abend(13);
+            }
             if (rc)
             {
-                s0c3Abend(17);
                 return rc;
             }
         }
@@ -121,8 +120,6 @@ int readSync(IHADCB *dcb, char *buffer)
         {
             s0c3Abend(UNSUPPORTED_RECFM);
         }
-
-        // }
     }
     else
     {
@@ -131,9 +128,9 @@ int readSync(IHADCB *dcb, char *buffer)
 }
 
 // NOTE(Kelosky): registers 2-12 should be the same as the time
-// the read/check was called.
+// the read/check was called for non-VSAM end of data exit.
 void eodad()
 {
-    s0c3Abend(32);
     fc->eod = 1;
+    // s0c3Abend(48);
 }

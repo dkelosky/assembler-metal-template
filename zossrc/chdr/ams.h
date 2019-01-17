@@ -202,12 +202,12 @@ DCB_READ_MODEL(openReadModel);
 #define CHECK(ecb, rc)                                          \
     __asm(                                                      \
         "*                                                  \n" \
-        " CHECK %0                                          \n" \
+        " CHECK %1                                          \n" \
         "*                                                  \n" \
-        " ST    15,%1     Save RC                           \n" \
+        " ST    15,%0     Save RC                           \n" \
         "*                                                    " \
-        : "=m"(ecb)                                              \
-        : "m"(rc)                                              \
+        : "=m"(rc)                                              \
+        : "m"(ecb)                                              \
         : "r0", "r1", "r14", "r15");
 #else
 #define CHECK(ecb, rc)
@@ -343,7 +343,7 @@ static IHADCB *PTR32 newDcb(char *ddname, int lrecl, int blkSize, unsigned char 
 
         // get space for DCBE + buffer
         short ctrlLen = sizeof(FILE_CTRL) + dcb->dcbblksi;
-        FILE_CTRL *fc = storageObtain24(ctrlLen);
+        FILE_CTRL *fc = storageObtain31(ctrlLen);
         memset(fc, 0x00, ctrlLen);
 
         // init file control
@@ -351,12 +351,13 @@ static IHADCB *PTR32 newDcb(char *ddname, int lrecl, int blkSize, unsigned char 
         fc->bufferLen = dcb->dcbblksi;
         fc->buffer = (unsigned char *)fc + sizeof(DCBE);
 
+        // init DCBE
         fc->dcbe.dcbelen = 56;
         memcpy(fc->dcbe.dcbeid, "DCBE", 4);
 
         // retain access to DCB / file control
         fc->dcbe.dcbeeoda = (void *)eodad;
-        dcb->dcbdcbe = &fc->dcbe;
+        dcb->dcbdcbe = fc;
     }
     // abend for unknown mode
     else

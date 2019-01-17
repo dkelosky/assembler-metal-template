@@ -31,8 +31,11 @@ int main()
     memcpy(writeBuf, helloMessage, strlen(helloMessage));
     int writeRc = writeSync(sysprintDcb, writeBuf);
 
-    // read
-    int readRc = readSync(inDcb, inbuff);
+    int readRc = 0;
+        // read
+
+    memset(inbuff, 0x00, 80);
+    readRc = readSync(inDcb, inbuff);
     memset(writeBuf, ' ', 132);
     memcpy(writeBuf, inbuff, 80);
     writeRc = writeSync(sysprintDcb, writeBuf);
@@ -44,6 +47,7 @@ int main()
     wto(&buf);
 
     // read
+    memset(inbuff, 0x00, 80);
     readRc = readSync(inDcb, inbuff);
     memset(writeBuf, ' ', 132);
     memcpy(writeBuf, inbuff, 80);
