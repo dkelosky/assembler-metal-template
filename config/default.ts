@@ -72,7 +72,7 @@ export default {
             sources: {
                 TEMPLATE: {
                     // override options here (options are PARM=)
-                    // options: '"HELLO WORLD"'
+                    options: "'HELLO WORLD'"
                 }
             }
         }

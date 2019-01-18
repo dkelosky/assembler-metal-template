@@ -19,6 +19,23 @@
 
 #endif
 
+#define MAX_PARM_LENGTH 100 + 1
+
+typedef struct
+{
+    short int length;
+    char parms[MAX_PARM_LENGTH];
+} IN_DATA;
+
+#define HI_BIT_MASK 0x7FFFFFFF
+typedef struct
+{
+    union {
+        IN_DATA *PTR32 addr;
+        int value;
+    } data;
+} IN_PARM;
+
 #if defined(__IBM_METAL__)
 #define S0C3(n)                                                 \
     __asm(                                                      \

@@ -126,7 +126,7 @@
 //*
 //         IF (RC = 0) THEN
 //RUN      EXEC PGM={{{@key}}}{{#if options}},
-//             PARM=({{{options}}}){{/if}}
+//         PARM=({{{options}}}){{/if}}
 //STEPLIB  DD  DISP=SHR,DSN={{{../settings.hlq}}}.LOADLIB
 //SNAP     DD  SYSOUT=*
 //SYSPRINT DD  SYSOUT=*
