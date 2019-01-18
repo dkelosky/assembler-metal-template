@@ -18,7 +18,7 @@ int main(IN_PARM parm)
     IO_CTRL *snapIoc = openOutputAssert("SNAP", 125, 1632, dcbrecv + dcbrecbr + dcbrecca);
     IO_CTRL *inIoc = openInputAssert("IN", 80, 80, dcbrecf); // + dcbrecbr);
 
-    parm.data.value &= HI_BIT_MASK; // clear input parms for 64-bit reading
+    parm.data.addrValue &= HI_BIT_MASK; // clear input parms for 64-bit reading
 
     IHADCB *sysprintDcb = &sysprintIoc->dcb;
     IHADCB *snapDcb = &snapIoc->dcb;

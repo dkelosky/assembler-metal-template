@@ -32,7 +32,7 @@ typedef struct
 {
     union {
         IN_DATA *PTR32 addr;
-        int value;
+        int addrValue;
     } data;
 } IN_PARM;
 
