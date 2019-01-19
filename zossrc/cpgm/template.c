@@ -8,7 +8,6 @@
 #include "ams.h"
 #include "z.h"
 
-// using default prolog
 int main(IN_PARM parm)
 {
     WTO_BUF buf = {0};
@@ -19,10 +18,6 @@ int main(IN_PARM parm)
     IO_CTRL *inIoc = openInputAssert("IN", 80, 80, dcbrecf); // + dcbrecbr);
 
     parm.data.addrValue &= HI_BIT_MASK; // clear input parms for 64-bit reading
-
-    IHADCB *sysprintDcb = &sysprintIoc->dcb;
-    IHADCB *snapDcb = &snapIoc->dcb;
-    IHADCB *inDcb = &inIoc->dcb;
 
     buf.len = sprintf(buf.msg, "input '%.*s'", parm.data.addr->length, parm.data.addr->parms);
     wto(&buf);
@@ -47,10 +42,9 @@ int main(IN_PARM parm)
     memcpy(writeBuf, inbuff, 80);
     writeSync(sysprintIoc, writeBuf);
 
-    // close
     closeAssert(sysprintIoc);
+    closeAssert(snapIoc);
     closeAssert(inIoc);
 
-    // exit
     return 0;
 }

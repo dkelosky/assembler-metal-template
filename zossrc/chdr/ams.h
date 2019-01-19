@@ -224,6 +224,8 @@ typedef struct
     IHADCB *PTR32 dcb;
 } OPEN_PL;
 
+typedef OPEN_PL CLOSE_PL;
+
 typedef struct
 {
     unsigned char option;
@@ -291,9 +293,6 @@ typedef struct
     IHADCB dcb;
     DECB decb;
 } IO_CTRL;
-
-typedef OPEN_PL CLOSE_PL;
-
 
 // 8-char entry points for z
 #if defined(__IBM_METAL__)

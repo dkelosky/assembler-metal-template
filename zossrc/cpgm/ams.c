@@ -201,6 +201,9 @@ int readSync(IO_CTRL *ioc, char *buffer)
         // fixed only records until rdjfcb
         if (dcbrecf == dcb->dcbrecfm)
         {
+            // TODO(Kelosky): skip read and use buffer for blocked records
+            // right now, for non-blocked, there is no buffer
+            // read(dcb, rpl, fc->buffer);
             read(dcb, rpl, buffer);
 
             rc = check(rpl);
@@ -212,6 +215,9 @@ int readSync(IO_CTRL *ioc, char *buffer)
             {
                 return rc;
             }
+
+            // TODO(Kelosky): offset into buffer
+            // memcpy(buffer, fc->buffer, dcb->dcblrecl);
         }
         else
         {
