@@ -281,11 +281,11 @@ typedef struct
 typedef struct
 {
     DCBE dcbe;
-    short ctrlLen;
-    short bufferLen;
-    char *PTR32 buffer;
+    int ctrlLen;
+    int bufferLen;
     int bufferCtrl;
     unsigned int eod : 1;
+    char *PTR32 buffer;
 } FILE_CTRL;
 
 typedef struct

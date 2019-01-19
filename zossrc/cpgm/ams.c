@@ -30,7 +30,9 @@ static void setDcbDcbe(IHADCB *PTR32 dcb)
     // init file control
     fc->ctrlLen = ctrlLen;
     fc->bufferLen = dcb->dcbblksi;
-    fc->buffer = (unsigned char *)fc + sizeof(DCBE);
+
+    // buffer is at the end of the structure
+    fc->buffer = (unsigned char *)fc + offsetof(FILE_CTRL, buffer) + sizeof(fc->buffer);
 
     // init DCBE
     fc->dcbe.dcbelen = 56;
@@ -196,6 +198,7 @@ int readSync(IO_CTRL *ioc, char *buffer)
     if (dcb->dcbdcbe)
     {
         // file control begins at DCBE address
+        // __asm(" svc 199 ");
         fc = dcb->dcbdcbe;
 
         // fixed only records until rdjfcb
@@ -203,8 +206,8 @@ int readSync(IO_CTRL *ioc, char *buffer)
         {
             // TODO(Kelosky): skip read and use buffer for blocked records
             // right now, for non-blocked, there is no buffer
-            // read(dcb, rpl, fc->buffer);
-            read(dcb, rpl, buffer);
+            read(dcb, rpl, fc->buffer);
+            // read(dcb, rpl, buffer);
 
             rc = check(rpl);
             if (fc->eod)
@@ -217,7 +220,7 @@ int readSync(IO_CTRL *ioc, char *buffer)
             }
 
             // TODO(Kelosky): offset into buffer
-            // memcpy(buffer, fc->buffer, dcb->dcblrecl);
+            memcpy(buffer, fc->buffer, dcb->dcblrecl);
         }
         else
         {
@@ -228,6 +231,8 @@ int readSync(IO_CTRL *ioc, char *buffer)
     {
         s0c3Abend(DCBE_REQUIRED);
     }
+
+    return 0;
 }
 
 // NOTE(Kelosky): registers 2-13 should be the same as the time
