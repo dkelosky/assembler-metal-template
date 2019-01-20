@@ -37,6 +37,7 @@ export default {
                 AMS: {
                     options: metalOptions
                 },
+                AMSTEST: {},
             },
         },
 
@@ -49,6 +50,7 @@ export default {
                     // override options here
                 },
                 AMS: {},
+                AMSTEST: {},
             },
         },
 
@@ -62,6 +64,11 @@ export default {
                         "AMS",
                     ]
                     // override options here
+                },
+                AMSTEST: {
+                    includes: [
+                        "AMS",
+                    ]
                 }
             }
         },
@@ -72,8 +79,11 @@ export default {
             sources: {
                 TEMPLATE: {
                     // override options here (options are PARM=)
-                    options: "'HELLO WORLD'"
-                }
+                    options: "'HELLO WORLD'",
+                },
+                AMSTEST: {
+                    options: "'HELLO WORLD'",
+                },
             }
         }
     },

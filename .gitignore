@@ -3,3 +3,4 @@ node_modules
 config/local.ts
 build
 scripts/lib
+jest-stare
