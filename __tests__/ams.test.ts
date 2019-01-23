@@ -19,7 +19,7 @@ const test = [{
 let buildResponse: any;
 let testResponse: any;
 
-describe("Build tests", () => {
+describe("AMS tests", () => {
 
     beforeAll(() => {
 
@@ -44,15 +44,32 @@ describe("Build tests", () => {
 
     }, TIMEOUT)
 
-    it("should build without errors", () => {
-        expect(buildResponse.data.retcode).toBe("CC 0000");
-    });
-
-    it("should read all input lines", () => {
-        test.forEach((testData, index) => {
-            const file = fs.readFileSync(`output/${testResponse.data.jobid}/RUN${index}/SYSPRINT.txt`).toString().trim();
-            expect(file).toBe(testData.in);
+    describe("build tests", () => {
+        it("should build without errors", () => {
+            expect(buildResponse.data.retcode).toBe("CC 0000");
         });
     });
 
+    describe("execution tests", () => {
+        it("should read all input lines", () => {
+            test.forEach((testData, index) => {
+                const file = fs.readFileSync(`output/${testResponse.data.jobid}/RUN${index}/SYSPRINT.txt`).toString().trim();
+                expect(file).toBe(testData.in);
+            });
+        });
+
+        it("show our control block is built correctly", () => {
+            const responses = fs.readFileSync(`output/${testResponse.data.jobid}/RUN0/SNAP.txt`).toString().split('\n');
+            let index;
+            responses.forEach((response, x) => {
+                if (response.indexOf("Important Control Block") > -1) {
+                    index = x + 1;
+                }
+            });
+
+            expect(index).toBeDefined();
+
+            if (index) expect(responses[index].substr(9, responses[index].length)).toMatchSnapshot();
+        });
+    });
 });

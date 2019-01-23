@@ -318,7 +318,7 @@ int check(DECB *ecb) ATTRIBUTE(amode31);
 
 int close(IHADCB *) ATTRIBUTE(amode31);
 
-int snap(IHADCB *, SNAP_HEADER *, void *, void *) ATTRIBUTE(amode31);
+int snap(IHADCB *, SNAP_HEADER *, void *, int) ATTRIBUTE(amode31);
 
 void eodad();
 

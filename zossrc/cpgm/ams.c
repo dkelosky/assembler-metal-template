@@ -126,11 +126,12 @@ int openInput(IHADCB *dcb)
     return rc;
 }
 
-int snap(IHADCB *dcb, SNAP_HEADER *header, void *start, void *end)
+int snap(IHADCB *dcb, SNAP_HEADER *header, void *start, int len)
 {
     int rc = 0;
     SNAP_PLIST plist = {0};
-    SNAP(*dcb, *header, *(unsigned char *)start, *(unsigned char *)end, plist, rc);
+    unsigned char *end = (unsigned char *)start + len;
+    SNAP(*dcb, *header, *(unsigned char *)start, *end, plist, rc);
     return rc;
 }
 

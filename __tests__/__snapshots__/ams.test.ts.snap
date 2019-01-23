@@ -1,0 +1,3 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`AMS tests execution tests show our control block is built correctly 1`] = `"                            C3E3D9D3    0000000D 00000000 00000000            *            CTRL............    *"`;

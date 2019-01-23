@@ -9,6 +9,7 @@
 //RUN{{@index}} EXEC PGM=AMSTEST
 //STEPLIB  DD  DISP=SHR,DSN={{{../settings.hlq}}}.LOADLIB
 //SYSPRINT DD  SYSOUT=*
+//SNAP     DD  SYSOUT=*
 //IN       DD  *
 {{{in}}}
 /*
