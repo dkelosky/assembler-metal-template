@@ -28,13 +28,14 @@
 ### Advanced Usage
 
 #### Gen JCL
- * `npm run genjcl -- assemble` -> build JCL for assemble only
+ * `npm run genjcl -- compile` -> build JCL for compilation only
  * `npm run genjcl -- compile assemble/template bind execute` -> build JCL for compile, assemble template, bind, and execute
 
 #### Upload
- * `npm run upload -- asmpgm` -> upload asmpgm folder
- * `npm run upload -- asmpgm asmmac/#entry asmmac/#exit` upload asmpgm folder & #entry / #exit from asmmac
+ * `npm run upload -- cpgm` -> upload cpgm folder
+ * `npm run upload -- cpgm chdr/ams.h` upload cpgm folder & ams.h from chdr
 
 ## Reference
 https://medium.com/@dkelosky/zowe-and-hlasm-hello-world-build-deploy-695be1eb13dc
 https://medium.com/@dkelosky/how-to-automate-z-os-data-set-allocation-using-zowe-json-30e70fb960d8
+https://medium.com/@dkelosky/building-mainframe-metal-c-and-testing-with-jest-and-zowe-cli-1ee19bf3cf02
