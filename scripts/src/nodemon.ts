@@ -5,7 +5,7 @@ import { exec } from "child_process";
 const nodemon = require("nodemon");
 
 nodemon({
-    ext: "c h",
+    ext: "asm",
     watch: "zossrc",
     exec: "echo Watching for changes",
     // script: '',

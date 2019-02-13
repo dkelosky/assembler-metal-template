@@ -1,4 +1,4 @@
-# Zowe Assembler Example
+# Zowe Assembler & Metal C Example
 
 ## Setup
 1. `git clone` this project

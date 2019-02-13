@@ -28,19 +28,6 @@ export default {
     // job info
     job: {
 
-        // metal c compilation configuration
-        compile: {
-            options: metalOptions64,
-            includes: metalIncludes,
-            sources: {
-                TEMPLATE: {},
-                AMS: {
-                    options: metalOptions
-                },
-                AMSTEST: {},
-            },
-        },
-
         // assemble configuration
         assemble: {
             options: assemblyOptions,
@@ -49,8 +36,6 @@ export default {
                 TEMPLATE: {
                     // override options here
                 },
-                AMS: {},
-                AMSTEST: {},
             },
         },
 
@@ -61,15 +46,9 @@ export default {
             sources: {
                 TEMPLATE: {
                     includes: [
-                        "AMS",
                     ]
                     // override options here
                 },
-                AMSTEST: {
-                    includes: [
-                        "AMS",
-                    ]
-                }
             }
         },
 
@@ -81,26 +60,8 @@ export default {
                     // override options here (options are PARM=)
                     options: "'HELLO WORLD'",
                 },
-                AMSTEST: {
-                    options: "'HELLO WORLD'",
-                },
             }
         }
-    },
-
-    convert: {
-        assemble: {
-            options: assemblyOptions,
-            includes: assemblyMaclibs,
-            sources: {
-                DCBD: {
-                    // override options here
-                },
-                IHADCBE: {},
-                IHAECB: {},
-                JFCB: {},
-            },
-        },
     },
 
     deploy: {

@@ -1,0 +1,25 @@
+kind: pipeline
+name: template
+
+steps:
+- name: build_and_test
+  image: dkelosky/zowe-cli
+  environment:
+    USERNAME:
+      from_secret: MF_USER
+    PASSWORD:
+      from_secret: MF_PASSWORD
+  commands:
+  - zowe profiles create zosmf tso1 --user $USERNAME --password $PASSWORD --host tso1.ca.com --rejectUnauthorized=false
+  - "echo 'export default {'                      > config/local.ts"
+  - "echo '    settings: {'                      >> config/local.ts"
+  - "echo '        hlq: \"KELDA16.TEMP\",'       >> config/local.ts"
+  - "echo '        account: \"105300000\",'      >> config/local.ts"
+  - "echo '    },'                               >> config/local.ts"
+  - "echo '}'                                    >> config/local.ts"
+  - npm install
+  - "npm run build:scripts"
+  - npm run allocate
+  - npm run upload
+  - npm run test
+  - npm run delete
