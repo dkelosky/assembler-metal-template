@@ -1,7 +1,6 @@
 process.env.ALLOW_CONFIG_MUTATIONS = "yes"; // value doesn't matter
 
 import { execSync } from "child_process";
-import * as config from "config";
 import * as fs from "fs";
 
 const TIMEOUT = 20000;
