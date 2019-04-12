@@ -100,14 +100,23 @@
 {{/if}}
 /*
 //OBJECT   DD  DISP=SHR,DSN={{{../settings.hlq}}}.OBJLIB
+{{#if includes}}
+{{#each includes}}
+//         DD  DISP=SHR,DSN={{{.}}}
+{{/each}}
+{{else}}
+{{#each ../job.bind.includes}}
+//         DD  DISP=SHR,DSN={{{.}}}
+{{/each}}
+{{/if}}
 //SYSLIN   DD  *
  INCLUDE OBJECT({{{@key}}})
- {{#if includes}}
- {{#each includes}}
+ {{#if objects}}
+ {{#each objects}}
  INCLUDE OBJECT({{{.}}})
  {{/each}}
  {{else}}
- {{#each ../job.bind.includes}}
+ {{#each ../job.bind.objects}}
  INCLUDE OBJECT({{{.}}})
  {{/each}}
  {{/if}}
