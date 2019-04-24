@@ -16,6 +16,7 @@ import * as config from "config";
 import * as handlebars from "handlebars";
 import * as fs from "fs";
 import { dirname, basename } from "path";
+import mkdirp = require("mkdirp");
 
 // get config
 const job: any = config.get('job');
@@ -29,10 +30,8 @@ const numOfParms = process.argv.length - 2;
 
 // output jcl file name
 const jclOutFileKey = `jcl-out-file=`;
-const jclOutDirKey = `jcl-out-dir=`;
 const jclTemplatefile = `template.jcl`;
-let jclOutFile = `custom.jcl`;
-let jclOutDir = `./build`;
+let jclOutFile = `./build/custom.jcl`;
 
 // if input parms, add to map, then loop up job keys and keep what is in the map
 if (numOfParms > 0) {
@@ -42,11 +41,6 @@ if (numOfParms > 0) {
 
     if (parm.indexOf(jclOutFileKey) === 0) {
       jclOutFile = parm.substr(jclOutFileKey.length, parm.length - jclOutFileKey.length);
-      continue;
-    }
-
-    if (parm.indexOf(jclOutDirKey) === 0) {
-      jclOutDir = parm.substr(jclOutDirKey.length, parm.length - jclOutDirKey.length);
       continue;
     }
 
@@ -112,6 +106,6 @@ const jcl = fs.readFileSync(`./zossrc/jcl/${jclTemplatefile}`).toString();
 const compiled = handlebars.compile(jcl);
 const rendered = compiled(config);
 
-if (!fs.existsSync(jclOutDir)) fs.mkdirSync(jclOutDir);
-fs.writeFileSync(`${jclOutDir}/${jclOutFile}`, rendered);
-console.log(`Generated custom JCL to ${jclOutDir}/${jclOutFile}`);
+if (!fs.existsSync(dirname(jclOutFile))) mkdirp.sync(dirname(jclOutFile));
+fs.writeFileSync(`${jclOutFile}`, rendered);
+console.log(`Generated custom JCL to ${jclOutFile}`);
