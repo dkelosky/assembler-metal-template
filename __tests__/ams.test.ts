@@ -26,9 +26,9 @@ describe("AMS tests", () => {
         // build and run jcl to compile and bind all source
         const gen = execSync(`npm run genjcl:build`);
         console.log(gen.toString());
-        let cmd = "zowe jobs submit lf \"./build/custom.jcl\" --directory \"./output\" --rfj"
+        const customCmd = "zowe jobs submit lf \"./build/custom.jcl\" --directory \"./output\" --rfj"
 
-        buildResponse = JSON.parse(execSync(cmd).toString());
+        buildResponse = JSON.parse(execSync(customCmd).toString());
 
         // build and run jcl to test service
         const jcl = fs.readFileSync("./zossrc/jcl/amstest.jcl").toString();
@@ -39,8 +39,8 @@ describe("AMS tests", () => {
         fs.writeFileSync("./build/amstest.jcl", rendered);
         console.log("Generated custom JCL to ./build/amstest.jcl");
 
-        cmd = "zowe jobs submit lf \"./build/amstest.jcl\" --directory \"./output\" --rfj"
-        testResponse = JSON.parse(execSync(cmd).toString());
+        const asmTestCmd = "zowe jobs submit lf \"./build/amstest.jcl\" --directory \"./output\" --rfj"
+        testResponse = JSON.parse(execSync(asmTestCmd).toString());
 
     }, TIMEOUT)
 
