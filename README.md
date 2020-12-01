@@ -1,5 +1,9 @@
 # Zowe Assembler Example
 
+## Newer Metal C Template
+
+https://github.com/dkelosky/metal-template
+
 ## Setup
 1. `git clone` this project
 2. `npm install`
