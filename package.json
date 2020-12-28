@@ -18,7 +18,7 @@
   "devDependencies": {
     "@types/config": "0.0.34",
     "@types/mustache": "^0.8.32",
-    "@types/node": "^10.11.3",
+    "@types/node": "^10.12.9",
     "config": "^2.0.1",
     "mustache": "^3.0.1"
   }
