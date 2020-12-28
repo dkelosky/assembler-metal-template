@@ -26,7 +26,6 @@
   "license": "ISC",
   "devDependencies": {
     "@types/config": "0.0.34",
-    "@types/handlebars": "^4.0.40",
     "@types/jest": "^23.3.10",
     "@types/node": "^10.12.18",
     "config": "^2.0.2",
