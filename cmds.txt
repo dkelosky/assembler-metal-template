@@ -1,0 +1,2 @@
+free dd(sysexec)
+allocate dd(sysexec) dsn('isp.sispexec','dkelosky.rexx') shr
