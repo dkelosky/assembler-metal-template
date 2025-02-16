@@ -1,6 +1,2 @@
-output
-node_modules
-config/local.ts
-build
-scripts/lib
-jest-stare
+zowe.config.json
+zowe.schema.json
